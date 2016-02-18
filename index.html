@@ -18,24 +18,13 @@
     </div>
 
     <main>
-      <div id='currentBook'>
-        <img src='#' id='book'>
-        <div id='info'>
-          <h2>Title</h2>
-          <h3>Author</h3>
-          <p>Due March 3rd - Read 9 pages a day</p>
-          <p>Status Bar</p>
-          <button>Update Read Pages</button>
-          <button>Update Due Date</button>
-        </div>
-      </div>
-        
       <div id='bookSearch' class='centered'>
-        <input type='search' name='search' placeholder='Title, Author, Genre'>
-        <button>Search</button>
+        <input type='search' name='search' id='searchInput' placeholder='Search by Title or Author'>
+        <button id='searchButton'>Search</button>
+        <p id='alert'></p>
       </div>
 
-      <div id='bookList'>
+      <div id='books'>
         <h2>Book List</h2>
         <ul></ul>
       </div>
