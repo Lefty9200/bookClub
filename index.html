@@ -8,42 +8,44 @@
   </head>
 
   <body>
-    <header>
-      <h1>Book Club</h1>
+    <div id='header'>
+      <h1 id='title'>Book Club</h1>
       <div id='login'>
         <input type='text' name='username' placeholder='Name'>
         <input type='password' name='psw' placeholder='Password'>
         <button>Sign In</button>
       </div>
-    </header>
+    </div>
 
-    <div id='currentBook'>
-      <div id='book'>
-        <img src='#'>
+    <main>
+      <div id='currentBook'>
+        <img src='#' id='book'>
+        <div id='info'>
+          <h2>Title</h2>
+          <h3>Author</h3>
+          <p>Due March 3rd - Read 9 pages a day</p>
+          <p>Status Bar</p>
+          <button>Update Read Pages</button>
+          <button>Update Due Date</button>
+        </div>
       </div>
-      <div id='info'>
-        <h2>Title</h2>
-        <h3>Author</h3>
-        <p>Due March 3rd - Read 9 pages a day</p>
-        <p>Status Bar</p>
-        <button>Update Read Pages</button>
-        <button>Update Due Date</button>
+        
+      <div id='bookSearch' class='centered'>
+        <input type='search' name='search' placeholder='Title, Author, Genre'>
+        <button>Search</button>
       </div>
-    </div>
-      
-    <div id='bookSearch'>
-      <input type='search' name='search' placeholder='Title, Author, Genre'>
-      <button>Search</button>
-    </div>
 
-    <div id='bookList'>
-      <h2>Book List</h2>
-    </div>
+      <div id='bookList'>
+        <h2>Book List</h2>
+        <ul></ul>
+      </div>
 
-    <div id='completedBooks'>
-      <h2>Completed</h2>
-    </div>
-  
+      <div id='completedBooks'>
+        <h2>Completed</h2>
+        <ul></ul>
+      </div>
+    </main>
+
     <footer> 
       <p>Bookclub Inc.</p>  
     </footer>
