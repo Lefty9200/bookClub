@@ -1,15 +1,23 @@
-var app = {};
+var searchInput = document.getElementById('searchInput');
+var searchButton = document.getElementById('searchButton');
+var searchAlert = document.getElementById('searchAlert');
 
-  app.bookSearch = function() {
-    var search = document.getElementById('searchButton');
-    var searchField = document.getElementById('searchInput');
+function clickAlert() {
+  if (searchInput.value.length > 0) {
+      searchAlert.textContent = '';
+    } else {
+      searchAlert.textContent = 'Please provide search parameters'; 
+    }   
 
-    search.addEventListner('click', apiGrab);
-
-    function apiGrab() {
-      if (searchField === 'Search by Title or Author' || searchField === '') {
-        document.getElementById('alert').innerHTML = 'Please provide search crite' + 
-        'ria for you book!';
-      }
+  function inputAlert() {
+    if (searchInput.value.length > 0) {
+      searchAlert.textContent = '';
+    } else {
+      searchAlert.textContent = 'Please provide search parameters'; 
+    }  
   }
+  searchInput.addEventListener('input', inputAlert); 
+
+  searchInput.value = '';
 }
+searchButton.addEventListener('click', clickAlert);
