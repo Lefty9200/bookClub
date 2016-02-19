@@ -1,23 +1,25 @@
+
+// Search Alerts
 var searchInput = document.getElementById('searchInput');
 var searchButton = document.getElementById('searchButton');
-var searchAlert = document.getElementById('searchAlert');
+var alertStatement = document.getElementById('alertStatement');
 
-function clickAlert() {
-  if (searchInput.value.length > 0) {
-      searchAlert.textContent = '';
-    } else {
-      searchAlert.textContent = 'Please provide search parameters'; 
-    }   
+function Alert() {
+  alertCall();  
 
-  function inputAlert() {
-    if (searchInput.value.length > 0) {
-      searchAlert.textContent = '';
-    } else {
-      searchAlert.textContent = 'Please provide search parameters'; 
-    }  
+  function Alert() {
+    alertCall();
   }
-  searchInput.addEventListener('input', inputAlert); 
+  searchInput.addEventListener('input', Alert); 
 
   searchInput.value = '';
 }
-searchButton.addEventListener('click', clickAlert);
+searchButton.addEventListener('click', Alert);
+
+function alertCall() {
+  if (searchInput.value.length > 0) {
+    alertStatement.textContent = '';
+  } else {
+    alertStatement.textContent = 'Please provide search parameters'; 
+  } 
+}

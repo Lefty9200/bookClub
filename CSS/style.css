@@ -25,6 +25,10 @@ img {
   margin: 30px 0  30px 40%;
 }
 
+#alertStatement {
+  color: red;
+}
+
 footer p {
   float: right;
 }
