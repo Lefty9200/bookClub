@@ -49,7 +49,13 @@ function bookApi() {
   function handleResponse(response) {
     for (var i = 0; i < response.items.length; i++) {
       var item = response.items[i];
-      document.getElementById('searchResults').innerHTML += '<br>' + item.volumeInfo.title;
+      
+      var newDiv = document.createElement('div');
+      var newContent = document.createTextNode(item.volumeInfo.title);
+      newDiv.appendChild(newContent);
+
+      var currentDiv = document.getElementById('div1');
+      document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
     }
   }
 
@@ -67,6 +73,7 @@ function bookApi() {
 searchButton.addEventListener('click', bookApi);
 
 
+// Add to Book List
 
 
   
