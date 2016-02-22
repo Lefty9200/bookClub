@@ -1,62 +1,66 @@
-// Search Elements
-var searchInput = document.getElementById('searchInput');
-var searchButton = document.getElementById('searchButton');
-var alertStatement = document.getElementById('alertStatement');
-
-// // Search Alerts
-// function Alert() {
-//   alertCall();  
-
-//   function Alert() {
-//     alertCall();
-//   }
-//   searchInput.addEventListener('input', Alert); 
-
-//   searchInput.value = '';
-// }
-// searchButton.addEventListener('click', Alert);
-
-// function alertCall() {
-//   if (searchInput.value.length > 0) {
-//     alertStatement.textContent = '';
-//   } else {
-//     alertStatement.textContent = 'Please provide search parameters'; 
-//   } 
-// }
-
 // Search to Script
-function searchToScript() {
-  var input = (searchInput.value.split(' '));
-  var script = '';
-  var result = '';
-  var req = new XMLHttpRequest();
+var searchButton = document.getElementById('searchButton');
 
-  for (var i = 0; i < input.length; i++) {
-    if (i != input.length - 1) {
-      script += input[i] + '+'; 
+function bookApi() {
+  var searchInput = document.getElementById('searchInput');
+  var alertStatement = document.getElementById('alertStatement');
+  var input = searchInput.value.split(' ');
+  var result = '';
+  
+  // Alerts
+  function searchAlert() {
+    alertCall();  
+    function searchAlert() {
+      alertCall();
+    }
+    searchInput.addEventListener('input', searchAlert); 
+    searchInput.value = '';
+  }
+
+  function alertCall() {
+    if (searchInput.value.length > 0) {
+      alertStatement.textContent = '';
     } else {
-      script += input[i];
+      return alertStatement.textContent = 'Please provide search parameters'; 
+    } 
+  } 
+  searchAlert();
+
+  // Creates Script for search
+  function searchToScript() {
+    var script = '';
+
+    for (var i = 0; i < input.length; i++) {
+      if (i != input.length - 1) {
+        script += input[i] + '+'; 
+      } else {
+        script += input[i];
+      }
+    }
+    result = 'https://www.googleapis.com/books/v1/volumes?q=' + script;
+  } 
+  searchToScript();
+
+  // Displays search results
+  function handleResponse(response) {
+    for (var i = 0; i < response.items.length; i++) {
+      var item = response.items[i];
+      document.getElementById('searchResults').innerHTML += '<br>' + item.volumeInfo.title;
     }
   }
-  result = 'https://www.googleapis.com/books/v1/volumes?q=' + script;
 
-  function handleResponse(response) {
-    
-    console.log(response.items[1].volumeInfo.title);
-  }
-
+  // Initializes api request 
   function get(url, callback) {
     var request = new XMLHttpRequest();
     request.open('GET', url);
     request.onreadystatechange = function() {
       callback(JSON.parse(request.responseText));
     };
-    request.send(null);
+    request.send();
   }
   return get(result, handleResponse);
 }
-
-searchButton.addEventListener('click', searchToScript);
+searchButton.addEventListener('click', bookApi);
 
 
 
