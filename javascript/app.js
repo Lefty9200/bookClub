@@ -1,11 +1,15 @@
-// Search to Script
 var searchButton = document.getElementById('searchButton');
 
+// Handles Book Search
 function bookApi() {
+  // Needed variables
   var searchInput = document.getElementById('searchInput');
   var alertStatement = document.getElementById('alertStatement');
   var input = searchInput.value.split(' ');
   var result = '';
+  
+  // Clear any previous search results
+  document.getElementById('searchResults').innerHTML = '';
   
   // Alerts
   function searchAlert() {
@@ -21,7 +25,7 @@ function bookApi() {
     if (searchInput.value.length > 0) {
       alertStatement.textContent = '';
     } else {
-      return alertStatement.textContent = 'Please provide search parameters'; 
+      alertStatement.textContent = 'Please provide search parameters'; 
     } 
   } 
   searchAlert();
@@ -58,7 +62,7 @@ function bookApi() {
     };
     request.send();
   }
-  return get(result, handleResponse);
+  get(result, handleResponse);
 }
 searchButton.addEventListener('click', bookApi);
 
