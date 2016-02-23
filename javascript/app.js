@@ -1,13 +1,17 @@
+// Global variables
+var response = {};
 var searchButton = document.getElementById('searchButton');
+var addBookButton = document.getElementById('addBookButton');
 
-// Handles book Search
+
+// Retrieve API results
 function bookApi() {
   // Needed variables
   var searchInput = document.getElementById('searchInput');
   var alertStatement = document.getElementById('alertStatement');
   var input = searchInput.value.split(' ');
   var result = '';
-  
+
   // Clear any previous search results
   document.getElementById('searchResults').innerHTML = '';
   
@@ -46,7 +50,9 @@ function bookApi() {
   searchToScript();
 
   // Displays search results
-  function handleResponse(response) {
+  function handleResponse() {
+    response = JSON.parse(this.responseText);
+
     for (var i = 0; i < response.items.length; i++) {
       var item = response.items[i];
       
@@ -60,6 +66,7 @@ function bookApi() {
       var newButton = document.createElement('button');
       var newButtonContent = document.createTextNode('Add to book list');
       newButton.appendChild(newButtonContent);
+      newButton.setAttribute('id', 'addBookButton');
 
       // Set id, and add new content and button to div
       newDiv.appendChild(newDivContent);
@@ -67,6 +74,7 @@ function bookApi() {
       newDiv.setAttribute('class', 'searchResult');
       newDiv.setAttribute('id', '' + i);
 
+      // Add each result on top of the last
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
     }
@@ -75,10 +83,8 @@ function bookApi() {
   // Initializes api request 
   function get(url, callback) {
     var request = new XMLHttpRequest();
+    request.addEventListener('load', handleResponse)
     request.open('GET', url);
-    request.onreadystatechange = function() {
-      callback(JSON.parse(request.responseText));
-    };
     request.send();
   }
   get(result, handleResponse);
@@ -86,4 +92,20 @@ function bookApi() {
 searchButton.addEventListener('click', bookApi);
 
 
-// Add to Book List  
+// Add to book list
+function addToBookList() {
+
+}
+addBookButton.addEventListener('click', addToBookList);
+// Need to figure out how to update window to have new values created by search.
+
+
+
+
+
+
+
+
+
+
+
