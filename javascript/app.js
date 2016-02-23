@@ -1,6 +1,6 @@
 var searchButton = document.getElementById('searchButton');
 
-// Handles Book Search
+// Handles book Search
 function bookApi() {
   // Needed variables
   var searchInput = document.getElementById('searchInput');
@@ -30,7 +30,7 @@ function bookApi() {
   } 
   searchAlert();
 
-  // Creates Script for search
+  // Creates script for search
   function searchToScript() {
     var script = '';
 
@@ -50,9 +50,22 @@ function bookApi() {
     for (var i = 0; i < response.items.length; i++) {
       var item = response.items[i];
       
+      // Create new div
       var newDiv = document.createElement('div');
-      var newContent = document.createTextNode(item.volumeInfo.title);
-      newDiv.appendChild(newContent);
+
+      //Create content for new div
+      var newDivContent = document.createTextNode(item.volumeInfo.title);
+      
+      // Create new button for div
+      var newButton = document.createElement('button');
+      var newButtonContent = document.createTextNode('Add to book list');
+      newButton.appendChild(newButtonContent);
+
+      // Set id, and add new content and button to div
+      newDiv.appendChild(newDivContent);
+      newDiv.appendChild(newButton);
+      newDiv.setAttribute('class', 'searchResult');
+      newDiv.setAttribute('id', '' + i);
 
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
@@ -73,7 +86,4 @@ function bookApi() {
 searchButton.addEventListener('click', bookApi);
 
 
-// Add to Book List
-
-
-  
+// Add to Book List  
