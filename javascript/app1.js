@@ -15,23 +15,29 @@ function bookApi() {
   // Clear any previous search results
   document.getElementById('searchResults').innerHTML = '';
   
-  // Alerts
+  // First alert fires after search button event handler fires
   function searchAlert() {
-    alertCall();  
+    alertCall();
+    // Second alert fires after first alert and is tied to the input event handler  
     function searchAlert() {
       alertCall();
     }
+    // Clearing search input after alerts are ran
     searchInput.addEventListener('input', searchAlert); 
     searchInput.value = '';
   }
 
+  // Alert funciton used for both first and second alerts.
   function alertCall() {
     if (searchInput.value.length > 0) {
+      // Does not display or removes text alert
       alertStatement.textContent = '';
     } else {
+      // Provides text alert to user
       alertStatement.textContent = 'Please provide search parameters'; 
     } 
   } 
+  // Call alert function
   searchAlert();
 
   // Creates script for search
@@ -51,54 +57,51 @@ function bookApi() {
 
   // Displays search results
   function handleResponse() {
+    // Parse JSON Data for use
     response = JSON.parse(this.responseText);
 
+    // Loop through results and add to search results
     for (var i = 0; i < response.items.length; i++) {
       var item = response.items[i];
       
       // Create new div
       var newDiv = document.createElement('div');
+      newDiv.className = 'searchResult';
+      newDiv.id = i;
+      newDiv.innerHTML = item.volumeInfo.title;
 
-      //Create content for new div
-      var newDivContent = document.createTextNode(item.volumeInfo.title);
-      
       // Create new button for div
       var newButton = document.createElement('button');
-      var newButtonContent = document.createTextNode('Add to book list');
-      newButton.appendChild(newButtonContent);
-      newButton.setAttribute('id', 'addBookButton');
-
-      // Set id, and add new content and button to div
-      newDiv.appendChild(newDivContent);
+      newButton.className = 'addBookButton';
+      newButton.innerHTML = 'Add to book list';
       newDiv.appendChild(newButton);
-      newDiv.setAttribute('class', 'searchResult');
-      newDiv.setAttribute('id', '' + i);
 
       // Add each result on top of the last
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+      newButton.onclick = addToBookList;
     }
   }
 
   // Initializes api request 
   function get(url, callback) {
     var request = new XMLHttpRequest();
+    // Forces handleResponse to fire after load is complete
     request.addEventListener('load', handleResponse)
     request.open('GET', url);
     request.send();
   }
+  // Call get function
   get(result, handleResponse);
 }
+// Add event listener to search button
 searchButton.addEventListener('click', bookApi);
 
 
 // Add to book list
 function addToBookList() {
-  
+  console.log('Yess!');
 }
-addBookButton.addEventListener('click', addToBookList);
-// Need to figure out how to update window to have new values created by search.
-
 
 
 
