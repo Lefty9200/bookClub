@@ -1,5 +1,5 @@
 // Global variables
-var response = [];
+var response = {};
 var searchButton = document.getElementById('searchButton');
 var addBookButton = document.getElementById('addBookButton');
 
@@ -58,19 +58,28 @@ function bookApi() {
   // Displays search results
   function handleResponse() {
     // Parse JSON Data for use
-    var convert = JSON.parse(this.responseText);
+    response = JSON.parse(this.responseText);
 
-    // Call function to handle creation of a results object
-    for (var i = 0; i < convert.items.length; i++) {
-      var item = convert.items[i];
+    // Call function to handle creation of elements
+    for (var i = 0; i < response.items.length; i++) {
+      var item = response.items[i];
 
-      response.push({ 
-        title: item.volumeInfo.title,
-        author: item.volumeInfo.authors[0],
-        description: item.volumeInfo.description,
-        pagecount: item.volumeInfo.pagecount, 
-        thumbnail: item.volumeInfo.imageLinks.thumbnail
-      });
+      // Create new div
+      var newDiv = document.createElement('div');
+      newDiv.className = 'searchResult';
+      newDiv.id = i;
+      newDiv.innerHTML = item.volumeInfo.title;
+
+      // Create new button for div
+      var newButton = document.createElement('button');
+      newButton.className = 'addBookButton';
+      newButton.innerHTML = 'Add to book list';
+      newDiv.appendChild(newButton);
+
+      // Add each result on top of the last
+      var currentDiv = document.getElementById('div1');
+      document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+      newButton.onclick = addToBookList;
     }
   }
 
@@ -89,15 +98,28 @@ function bookApi() {
 searchButton.addEventListener('click', bookApi);
 
 
-// Populate search results
+function addToBookList() {
+  var newDiv = document.createElement('div');
+  newDiv.className = 'addedBook';
+  newDiv.innerHTML = 'test';
+
+  // Create new button for div
+  var newButton = document.createElement('button');
+  newButton.className = 'completeBookButton';
+  newButton.innerHTML = 'Completed';
+  newDiv.appendChild(newButton);
+
+  // Add each result on top of the last
+  var currentDiv = document.getElementById('div1');
+  document.getElementById('books').insertBefore(newDiv, currentDiv);
+  newButton.onclick = addtoCompleted;
+}
 
 
-// Add to book list
+// Add to completed
+function addtoCompleted() {
 
-
-// Move to completed
-
-
+}
 
 
 
