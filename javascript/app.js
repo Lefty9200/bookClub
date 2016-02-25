@@ -60,10 +60,10 @@ function bookApi() {
     // Parse JSON Data for use
     response = JSON.parse(this.responseText);
 
-    // Loop through results and add to search results
+    // Call function to handle creation of elements
     for (var i = 0; i < response.items.length; i++) {
       var item = response.items[i];
-      
+
       // Create new div
       var newDiv = document.createElement('div');
       newDiv.className = 'searchResult';
@@ -98,14 +98,28 @@ function bookApi() {
 searchButton.addEventListener('click', bookApi);
 
 
-// Add to book list
 function addToBookList() {
-  console.log('Yess!');
+  var newDiv = document.createElement('div');
+  newDiv.className = 'addedBook';
+  newDiv.innerHTML = 'test';
+
+  // Create new button for div
+  var newButton = document.createElement('button');
+  newButton.className = 'completeBookButton';
+  newButton.innerHTML = 'Completed';
+  newDiv.appendChild(newButton);
+
+  // Add each result on top of the last
+  var currentDiv = document.getElementById('div1');
+  document.getElementById('books').insertBefore(newDiv, currentDiv);
+  newButton.onclick = addtoCompleted;
 }
 
 
+// Add to completed
+function addtoCompleted() {
 
-
+}
 
 
 
