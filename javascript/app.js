@@ -1,7 +1,6 @@
 // Global variables
 var response = [];
 var searchButton = document.getElementById('searchButton');
-var addBookButton = document.getElementById('addBookButton');
 
 
 // Retrieve API results
@@ -72,6 +71,7 @@ function bookApi() {
         thumbnail: item.volumeInfo.imageLinks.thumbnail
       });
     }
+    searchResults();
   }
 
   // Initializes api request 
@@ -90,12 +90,48 @@ searchButton.addEventListener('click', bookApi);
 
 
 // Populate search results
+function searchResults() {
+  for (var i = 0; i < response.length; i++) {
+  var newDiv = document.createElement('div');
+  newDiv.className = 'searchResult';
+  newDiv.innerHTML = response[i].title;
+
+  // Create new button for div
+  var newButton = document.createElement('button');
+  newButton.className = 'addBookButton';
+  newButton.innerHTML = 'Add to book list';
+  newDiv.appendChild(newButton);
+
+  // Add each result on top of the last
+  var currentDiv = document.getElementById('div1');
+  document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+  newButton.onclick = addToBookList;
+  }
+}
 
 
 // Add to book list
+function addToBookList() {
+  // Cloned search result clicked for addition to book list
+  var newBook = this.parentNode.cloneNode(true);
+
+  // Changed attributes for booklist items
+  newBook.setAttribute('class', 'book');
+  newBook.lastChild.setAttribute('class', 'removeBookButton');
+  newBook.lastChild.innerHTML = 'Remove';
+  newBook.lastChild.onclick = removeBook;
+
+  // Appended to book list. Wanted newest added to display last 
+  document.getElementById('bookList').appendChild(newBook);
+}
+
+// Remove book from book list
+function removeBook() {
+  this.parentNode.remove();
+}
 
 
-// Move to completed
+// Select current book
 
 
 
