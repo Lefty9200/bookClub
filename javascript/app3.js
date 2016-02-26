@@ -20,8 +20,8 @@
     var alertStatement = document.getElementById('alertStatement');
 
     // Clear any previous search results
+    response = [];
     document.getElementById('searchResults').innerHTML = '';
-
     
     // Display search results
     function handleResponse() {
@@ -78,8 +78,6 @@
       // fires get function
       return get(result);
     }
-
-
     // fires searchToScript function
     return searchToScript();
   }
@@ -139,7 +137,7 @@
         // Add each book on top of the last
         var currentDiv = document.getElementById('div1');
         document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-        newButton.onclick = removeBook;
+        //newButton.onclick = removeBook;
       }
     }
   }
@@ -148,9 +146,14 @@
 
 //------------------------------------------------------------------------------
   // Remove book from book list
-  function removeBook() {
-
-  }
+  // function removeBook() {
+  //   for (var i = 0; i < listofBooks.length; i++) {
+  //     if (this.parentNode.firstChild.innerHTML === listofBooks[i].title) {
+  //       console.log(listofBooks[i]);
+  //       // listofBooks = listofBooks.splice(listofBooks[i]);
+  //     } 
+  //   } 
+  // }
 //------------------------------------------------------------------------------
 
 
@@ -161,4 +164,5 @@
   - Need to make the return key work for search.
   - Make it so if book is already on reading list you can delete it.
   - Make it so api doesn't grab sample books or duplicates.
+  - Refactor code to get rid of redundancies.
 ------------------------------------------------------------------------------*/
