@@ -92,20 +92,24 @@
   // Populate search results
   function searchResults() {
     for (var i = 0; i < response.length; i++) {
-    var newDiv = document.createElement('div');
-    newDiv.className = 'searchResult';
-    newDiv.innerHTML = response[i].title;
+      // Create new div 
+      var newDiv = document.createElement('div');
+      newDiv.className = 'searchResult';
+      // Create new paragraph for div
+      var newParagraph = document.createElement('p');
+      newParagraph.innerHTML = response[i].title;
+      newDiv.appendChild(newParagraph);
 
-    // Create new button for div
-    var newButton = document.createElement('button');
-    newButton.className = 'addBookButton';
-    newButton.innerHTML = 'Add to book list';
-    newDiv.appendChild(newButton);
+      // Create new button for div
+      var newButton = document.createElement('button');
+      newButton.className = 'addBookButton';
+      newButton.innerHTML = 'Add to book list';
+      newDiv.appendChild(newButton);
 
-    // Add each result on top of the last
-    var currentDiv = document.getElementById('div1');
-    document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-    newButton.onclick = addToBookList;
+      // Add each result on top of the last
+      var currentDiv = document.getElementById('div1');
+      document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+      newButton.onclick = addToBookList;
     }
   }
 //------------------------------------------------------------------------------
@@ -114,10 +118,19 @@
 //------------------------------------------------------------------------------
   // Add book to book list
   function addToBookList() {
-    
+    for (var i = 0; i < response.length; i++) {
+      if (this.parentNode.firstChild.innerHTML === response[i].title) {
+
+      }
+    }
   }
 //------------------------------------------------------------------------------
 
+/* 
+   - push mathing book to list of books array
+   - loop through books array and create a book list element  
+   - add to book list
+*/
 
 //------------------------------------------------------------------------------
   // Remove book from book list
