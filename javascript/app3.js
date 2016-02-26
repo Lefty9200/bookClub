@@ -121,44 +121,30 @@
     for (var i = 0; i < response.length; i++) {
       if (this.parentNode.firstChild.innerHTML === response[i].title) {
         listofBooks.push(response[i]);
+
+        // Create new div 
+        var newDiv = document.createElement('div');
+        newDiv.className = 'book';
+        // Create new paragraph for div
+        var newParagraph = document.createElement('p');
+        newParagraph.innerHTML = response[i].title;
+        newDiv.appendChild(newParagraph);
+
+        // Create new button for div
+        var newButton = document.createElement('button');
+        newButton.className = 'removeBook';
+        newButton.innerHTML = 'Remove';
+        newDiv.appendChild(newButton);
+
+        // Add each book on top of the last
+        var currentDiv = document.getElementById('div1');
+        document.getElementById('bookList').insertBefore(newDiv, currentDiv);
+        newButton.onclick = removeBook;
       }
     }
-    return createBookList();
   }
 //------------------------------------------------------------------------------
 
-
-//------------------------------------------------------------------------------
-  // Create books list from listofbooks array.
-  function createBookList() {
-    for (var i = 0; i < listofBooks.length; i++) {
-      // Need to create if statement or something to stop funciton from adding
-      // books that have already been added
-      // Create new div 
-      var newDiv = document.createElement('div');
-      newDiv.className = 'book';
-      // Create new paragraph for div
-      var newParagraph = document.createElement('p');
-      newParagraph.innerHTML = listofBooks[i].title;
-      newDiv.appendChild(newParagraph);
-
-      // Create new button for div
-      var newButton = document.createElement('button');
-      newButton.className = 'removeBook';
-      newButton.innerHTML = 'Remove';
-      newDiv.appendChild(newButton);
-
-      // Add each result on top of the last
-      var currentDiv = document.getElementById('div1');
-      document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-      newButton.onclick = removeBook;
-    }
-  }
-//------------------------------------------------------------------------------
-
-/*  
-   - add to book list
-*/
 
 //------------------------------------------------------------------------------
   // Remove book from book list
