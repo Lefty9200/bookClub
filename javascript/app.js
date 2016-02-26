@@ -1,6 +1,10 @@
 // Global variables
-var response = [];
-var searchButton = document.getElementById('searchButton');
+  // Button for search
+  var searchButton = document.getElementById('searchButton');
+  // Array of search results
+  var response = [];
+  // Array of books on list
+  var listofBooks = [];
 
 
 // Retrieve API results
@@ -105,10 +109,18 @@ function searchResults() {
   // Add each result on top of the last
   var currentDiv = document.getElementById('div1');
   document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-  newButton.onclick = addToBookList;
+  // newButton.onclick = addToBookList;
   }
 }
 
+
+Add to book list
+function addToBookList() {
+  console.log(this.parentNode.innerHTML);
+  for (var i = 0; i < response.length; i++) {
+  //   if (response[i].title === this.parentNode.innerHTML)
+  // }
+}
 
 // Add to book list
 function addToBookList() {
@@ -130,13 +142,22 @@ function removeBook() {
   this.parentNode.remove();
 }
 
-
 // Select current book
 
 
 
 
+/* To Do:
+Need to make if statement to make api request run only if input is not empty
 
+Need to create queryselector mehtod so I don't have to keep using get element by
+id
+
+Need to create _.each method so I dont have to keep using for loops
+
+Need to create method that will only take out the title of a parent element so I
+can compare to response list.
+*/
 
 
 
