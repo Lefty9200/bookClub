@@ -27,11 +27,6 @@
   searchAlert();
 
 
-// Remove book from book list
-function removeBook() {
-  this.parentNode.remove();
-}
-
 /* To Do:
 Need to make if statement to make api request run only if input is not empty
 

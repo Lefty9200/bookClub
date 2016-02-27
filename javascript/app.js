@@ -12,6 +12,14 @@
 
 
 //------------------------------------------------------------------------------
+  // Make element function
+  // Make div function
+  // Make query selector
+  // Make _.each
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
   // Retrieve API results
   function bookApi() {
     // Variable for search parameters
@@ -98,7 +106,7 @@
       newParagraph.innerHTML = response[i].title;
       newDiv.appendChild(newParagraph);
 
-      // Create new button for div
+      // Create add button
       var newButton = document.createElement('button');
       newButton.className = 'addBookButton';
       newButton.innerHTML = 'Add to book list';
@@ -128,16 +136,23 @@
         newParagraph.innerHTML = response[i].title;
         newDiv.appendChild(newParagraph);
 
-        // Create new button for div
-        var newButton = document.createElement('button');
-        newButton.className = 'removeBook';
-        newButton.innerHTML = 'Remove';
-        newDiv.appendChild(newButton);
+        // Create star button
+        var starButton = document.createElement('button');
+        starButton.className = 'current';
+        starButton.innerHTML = 'Set as current';
+        newDiv.appendChild(starButton);
+
+        // Create remove button
+        var removeButton = document.createElement('button');
+        removeButton.className = 'removeBook';
+        removeButton.innerHTML = 'Remove';
+        newDiv.appendChild(removeButton);
 
         // Add each book on top of the last
         var currentDiv = document.getElementById('div1');
         document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-        newButton.onclick = removeBook;
+        starButton.onclick = setAsCurrent;
+        removeButton.onclick = removeBook;
       }
     }
   }
@@ -158,6 +173,13 @@
       }
     } 
   }
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Create selected book
+
+
 //------------------------------------------------------------------------------
 
 
