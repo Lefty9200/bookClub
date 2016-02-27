@@ -73,7 +73,7 @@
           script += input[i];
         }
       }
-      result = 'https://www.googleapis.com/books/v1/volumes?q=' + script;
+      result = 'https://www.googleapis.com/books/v1/volumes?q='+ script;
       // fires get function
       return get(result);
     }
@@ -81,6 +81,7 @@
     return searchToScript();
   }
   // Add event listener to search button
+  // Changed for now so i don't need to keep populating. Remember to change back!
   searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
 
@@ -136,7 +137,7 @@
         // Add each book on top of the last
         var currentDiv = document.getElementById('div1');
         document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-        //newButton.onclick = removeBook;
+        newButton.onclick = removeBook;
       }
     }
   }
@@ -145,14 +146,18 @@
 
 //------------------------------------------------------------------------------
   // Remove book from book list
-  // function removeBook() {
-  //   for (var i = 0; i < listofBooks.length; i++) {
-  //     if (this.parentNode.firstChild.innerHTML === listofBooks[i].title) {
-  //       console.log(listofBooks[i]);
-  //       // listofBooks = listofBooks.splice(listofBooks[i]);
-  //     } 
-  //   } 
-  // }
+  function removeBook() {
+    // Loop through the listofBooks to compare the objects title to the title of
+    // the clicked book
+    for (var i = 0; i < listofBooks.length; i++) {
+      // If the listofBooks objects title is equal to the clicked objects title
+      // remove this object from list
+      if (this.parentNode.firstChild.innerHTML === listofBooks[i].title) {
+        listofBooks.splice(i, 1);
+        this.parentNode.remove();
+      }
+    } 
+  }
 //------------------------------------------------------------------------------
 
 
