@@ -26,8 +26,8 @@
     }
   }
 
-  // Make element function
-  // Make div function
+  // Make element function.
+  // Make div function.
 //------------------------------------------------------------------------------
 
 
@@ -126,27 +126,36 @@
 
 
 //------------------------------------------------------------------------------
-  // Populate search results
+  // Populate search results.
   function searchResult() {
+    // Iterate over searchResponse and fire createDiv on each.
     _.each(searchResponse, createDiv);
     function createDiv(element) {
-      // Create new div 
+      // Create new div for each search result.
       var newDiv = document.createElement('div');
+      // Give div a class name for styling.
       newDiv.className = 'searchResult';
-      // Create new paragraph for div
+      
+      // Create new paragraph for div to hold title.
       var newParagraph = document.createElement('p');
+      // Make paragraph equal elements title.
       newParagraph.innerHTML = element.title;
+      // Append paragraph to div.
       newDiv.appendChild(newParagraph);
 
-      // Create add button
+      // Create add button for div.
       var newButton = document.createElement('button');
+      // Give button class name for styling.
       newButton.className = 'addBookButton';
+      // Set button name.
       newButton.innerHTML = 'Add to book list';
+      // Append button to div after paragraph is already appended so its last.
       newDiv.appendChild(newButton);
 
-      // Add each result on top of the last
+      // Add each result on top of the last.
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+      // Set new buttons onclick to funciton.
       newButton.onclick = addToListofBooks;
     }
   }
@@ -156,35 +165,48 @@
 //------------------------------------------------------------------------------
   // Add book to listofbooks array.
   function addToListofBooks() {
-    for (var i = 0; i < searchResponse.length; i++) {
-      if (this.parentNode.firstChild.innerHTML === searchResponse[i].title) {
-        listofBooks.push(searchResponse[i]);
+    var passedThis = this.parentNode.firstChild.innerHTML;
 
-        // Create new div 
-        var newDiv = document.createElement('div');
-        newDiv.className = 'book';
-        // Create new paragraph for div
-        var newParagraph = document.createElement('p');
-        newParagraph.innerHTML = searchResponse[i].title;
-        newDiv.appendChild(newParagraph);
+    _.each(searchResponse, pushToList);
+    function pushToList(element) {
+      if (passedThis === element.title) {
+        listofBooks.push(element);
 
-        // Create star button
-        var starButton = document.createElement('button');
-        starButton.className = 'current';
-        starButton.innerHTML = 'Set as current';
-        newDiv.appendChild(starButton);
+        function createDiv() {
+          // Create new div 
+          var newDiv = document.createElement('div');
+          newDiv.className = 'book';
+          // Create new paragraph for div
+          var newParagraph = document.createElement('p');
+          newParagraph.innerHTML = element.title;
+          newDiv.appendChild(newParagraph);
 
-        // Create remove button
-        var removeButton = document.createElement('button');
-        removeButton.className = 'removeBook';
-        removeButton.innerHTML = 'Remove';
-        newDiv.appendChild(removeButton);
+          // Create star button for div
+          var starButton = document.createElement('button');
+          // Give button class name for styling.
+          starButton.className = 'current';
+          // Set button name.
+          starButton.innerHTML = 'Set as current';
+          // Append button to div after paragraph.
+          newDiv.appendChild(starButton);
 
-        // Add each book on top of the last
-        var currentDiv = document.getElementById('div1');
-        document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-        // starButton.onclick = setAsCurrent;
-        removeButton.onclick = removeBook;
+          // Create remove button for div
+          var removeButton = document.createElement('button');
+          // Give button class name for styling.
+          removeButton.className = 'removeBook';
+          // Set button name.
+          removeButton.innerHTML = 'Remove';
+          // Append button to div after paragraph is already appended.
+          newDiv.appendChild(removeButton);
+
+          // Add each book on top of the last
+          var currentDiv = document.getElementById('div1');
+          document.getElementById('bookList').insertBefore(newDiv, currentDiv);
+          // Set new buttons onclick to funciton.
+          removeButton.onclick = removeBook;
+        }
+        // Fire createDiv function.
+        return createDiv();
       }
     }
   }
@@ -194,14 +216,20 @@
 //------------------------------------------------------------------------------
   // Remove book from book list
   function removeBook() {
-    // Loop through the listofBooks to compare the objects title to the title of
-    // the clicked book
-    for (var i = 0; i < listofBooks.length; i++) {
+    // Save passed this to variable.
+    var passedThis = this.parentNode;
+
+    // Iterate over list of books and apply removeFromList function.
+    _.each(listofBooks, removeFromList);
+    function removeFromList(element, index) {
       // If the listofBooks objects title is equal to the clicked objects title
       // remove this object from list
-      if (this.parentNode.firstChild.innerHTML === listofBooks[i].title) {
-        listofBooks.splice(i, 1);
-        this.parentNode.remove();
+      if (passedThis.firstChild.innerHTML === element.title) {
+        // Remove this object from list.
+        listofBooks.splice(index, 1);
+        
+        // Remove object from DOM.
+        passedThis.remove();
       }
     } 
   }
