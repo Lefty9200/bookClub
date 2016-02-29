@@ -227,7 +227,7 @@
           var currentDiv = document.getElementById('div1');
           document.getElementById('bookList').insertBefore(newDiv, currentDiv);
           // Set new buttons onclick to funciton.
-          newDiv.lastChild.previousSibling.onclick = createSelected;
+          newDiv.lastChild.previousSibling.onclick = createCurrent;
           newDiv.lastChild.onclick = removeBook;
         }
         // Fire createDiv function.
@@ -267,7 +267,7 @@
 
 //------------------------------------------------------------------------------
   // Create selected book
-  function createSelected() {
+  function createCurrent() {
     
   }
 
