@@ -3,9 +3,21 @@
   var _ = {};
 
   // QuerySelector. So I don't have to keep writing document.getElementByID. 
-  var $ = function(selector) {
+  var $ = function(selector, el) {
+    if (!el) {
+      el = document; 
+    }
     // Returns value allowing me to use $(seletor) from now on. 
-    return document.querySelector(selector);
+    return el.querySelector(selector);
+  }
+
+  // QuerySelector. For document.getElementByClassName. 
+  var $$ = function(selector, el) {
+    if (!el) {
+      el = document;
+    }
+    // Returns value allowing me to use $(seletor) from now on. 
+    return Array.prototype.slice.call(el.querySelectorAll(selector));
   }
 
   // each method so I don't have to keep writing for loops. 
@@ -27,9 +39,34 @@
   }
 
   // Make element function.
-  // Make div function.
+  _.makeElement = function(type, text, elementClass, id, parentElement) {
+    // Create add new element for a parent element.
+    var newElement = document.createElement(type);
+
+    if (text != undefined) {
+      // Set element.
+      newElement.innerHTML = text;
+    }
+    if (elementClass != undefined) {
+      // Give element class name for styling.
+      newElement.className = elementClass;
+    }
+    if (id != undefined) {
+      // Set element id.
+      newElement.id = id;
+    }
+
+    // Append button to div after paragraph is already appended so its last.
+    return parentElement.appendChild(newElement);
+  }
+
+
 //------------------------------------------------------------------------------
 
+/*
+  - Make element function.
+  - Make div function.
+*/
 
 //------------------------------------------------------------------------------
   // Global variables.
@@ -124,6 +161,12 @@
   searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
 
+/*
+  - Need to add alerts back into search. It needs to alert when search input is 
+    empty on 'click' and on 'input'. So when user it filling alert goes away.
+  - Need to make the return key work for search.
+  - Make it so api doesn't grab sample books or duplicates.
+*/
 
 //------------------------------------------------------------------------------
   // Populate search results.
@@ -135,28 +178,19 @@
       var newDiv = document.createElement('div');
       // Give div a class name for styling.
       newDiv.className = 'searchResult';
-      
-      // Create new paragraph for div to hold title.
-      var newParagraph = document.createElement('p');
-      // Make paragraph equal elements title.
-      newParagraph.innerHTML = element.title;
-      // Append paragraph to div.
-      newDiv.appendChild(newParagraph);
 
-      // Create add button for div.
-      var newButton = document.createElement('button');
-      // Give button class name for styling.
-      newButton.className = 'addBookButton';
-      // Set button name.
-      newButton.innerHTML = 'Add to book list';
-      // Append button to div after paragraph is already appended so its last.
-      newDiv.appendChild(newButton);
+      // Create new paragraph for div to hold title and append to div.
+      _.makeElement('p', element.title, undefined, undefined, newDiv);
+
+      // Create new paragraph for div to hold title and append to div.
+      _.makeElement('button', 'Add to book list', 'addBookButton', undefined, newDiv);
 
       // Add each result on top of the last.
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-      // Set new buttons onclick to funciton.
-      newButton.onclick = addToListofBooks;
+
+      // Add an onclick referance to addToListofBooks for earch new div.
+      newDiv.lastChild.onclick = addToListofBooks;
     }
   }
 //------------------------------------------------------------------------------
@@ -212,6 +246,10 @@
   }
 //------------------------------------------------------------------------------
 
+/*
+  - Need to fix multiples being added to list. Think another loop and if 
+    statement to check against elements already existing in list is all we need.
+*/
 
 //------------------------------------------------------------------------------
   // Remove book from book list
@@ -242,11 +280,3 @@
 
 //------------------------------------------------------------------------------
 
-
-/*----Tweaqs--------------------------------------------------------------------
-  - Need to add alerts back into search. It needs to alert when search input is 
-    empty on 'click' and on 'input'. So when user it filling alert goes away.
-  - Need to make the return key work for search.
-  - Make it so if book is already on reading list you can delete it.
-  - Make it so api doesn't grab sample books or duplicates.
-------------------------------------------------------------------------------*/
