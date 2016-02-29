@@ -1,4 +1,4 @@
-#title {
+#appName {
   display: inline-block;
   margin: 20px 0 20px 0;
 }
@@ -31,4 +31,13 @@ img {
 
 footer p {
   float: right;
+}
+
+#cover {
+}
+
+#bookContent {
+  float: right;
+  margin-top: 50px;
+  margin-right: 420px;
 }
