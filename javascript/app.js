@@ -4,19 +4,23 @@
 
   // QuerySelector. So I don't have to keep writing document.getElementByID. 
   var $ = function(selector, el) {
+    // If element is not given as an argument.
     if (!el) {
+      // el is equal to the document object.
       el = document; 
     }
-    // Returns value allowing me to use $(seletor) from now on. 
+    // Returns value of selector allowing me to use $(seletor) from now on. 
     return el.querySelector(selector);
   }
 
   // QuerySelector. For document.getElementByClassName. 
   var $$ = function(selector, el) {
+    // If element is not given as an argument.
     if (!el) {
+      // el is equal to the document object.
       el = document;
     }
-    // Returns value allowing me to use $(seletor) from now on. 
+    // Returns value of selector as an array of all elements with class. 
     return Array.prototype.slice.call(el.querySelectorAll(selector));
   }
 
@@ -59,14 +63,8 @@
     // Append button to div after paragraph is already appended so its last.
     return parentElement.appendChild(newElement);
   }
-
-
 //------------------------------------------------------------------------------
 
-/*
-  - Make element function.
-  - Make div function.
-*/
 
 //------------------------------------------------------------------------------
   // Global variables.
@@ -157,6 +155,7 @@
     // Fires scriptForSearch function to create custom search based on input.
     return scriptForSearch();
   }
+
   // Add event listener to search button so when clicked bookApi fires.
   searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
@@ -199,45 +198,37 @@
 //------------------------------------------------------------------------------
   // Add book to listofbooks array.
   function addToListofBooks() {
+    // Save the div that was added from the previous funciton to variable.
     var passedThis = this.parentNode.firstChild.innerHTML;
 
+    // Loop through searchvresponses to compare titles to clicked element.
     _.each(searchResponse, pushToList);
     function pushToList(element) {
+      // If they match push element from search list to book list.
       if (passedThis === element.title) {
         listofBooks.push(element);
 
+        // Also create a div with the added books info to display to user.
         function createDiv() {
-          // Create new div 
+          // Create new div. 
           var newDiv = document.createElement('div');
           newDiv.className = 'book';
-          // Create new paragraph for div
-          var newParagraph = document.createElement('p');
-          newParagraph.innerHTML = element.title;
-          newDiv.appendChild(newParagraph);
 
-          // Create star button for div
-          var starButton = document.createElement('button');
-          // Give button class name for styling.
-          starButton.className = 'current';
-          // Set button name.
-          starButton.innerHTML = 'Set as current';
-          // Append button to div after paragraph.
-          newDiv.appendChild(starButton);
+          // Create new paragraph for div.
+          _.makeElement('p', element.title, undefined, undefined, newDiv);
 
-          // Create remove button for div
-          var removeButton = document.createElement('button');
-          // Give button class name for styling.
-          removeButton.className = 'removeBook';
-          // Set button name.
-          removeButton.innerHTML = 'Remove';
-          // Append button to div after paragraph is already appended.
-          newDiv.appendChild(removeButton);
+          // Create star button for div.
+          _.makeElement('button', 'Set as current', 'currentBook', undefined, newDiv);
 
-          // Add each book on top of the last
+          // Create remove button for div.
+          _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
+
+          // Add each book on top of the last.
           var currentDiv = document.getElementById('div1');
           document.getElementById('bookList').insertBefore(newDiv, currentDiv);
           // Set new buttons onclick to funciton.
-          removeButton.onclick = removeBook;
+          newDiv.lastChild.previousSibling.onclick = createSelected;
+          newDiv.lastChild.onclick = removeBook;
         }
         // Fire createDiv function.
         return createDiv();
@@ -276,7 +267,9 @@
 
 //------------------------------------------------------------------------------
   // Create selected book
-
+  function createSelected() {
+    
+  }
 
 //------------------------------------------------------------------------------
 
