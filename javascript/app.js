@@ -76,6 +76,8 @@
     var listOfBooks = [];
     // Array of completed books.
     var completedBooks = [];
+    // Current Book.
+    var currentBook = {};
 //------------------------------------------------------------------------------
 
 
@@ -105,7 +107,9 @@
           author: item.volumeInfo.authors[0],
           description: item.volumeInfo.description,
           pagecount: item.volumeInfo.pageCount, 
-          thumbnail: item.volumeInfo.imageLinks.thumbnail
+          thumbnail: item.volumeInfo.imageLinks.thumbnail,
+          // progress added to track book complettion if added to list
+          progress: 0
         });
       });
       // Returns searchResult to display actual information to DOM. 
@@ -113,29 +117,29 @@
     }
 
 
-    // Initializes api request 
+    // Initializes api request. 
     function get(url) {
-      // Saving request in variable
+      // Saving request in variable.
       var request = new XMLHttpRequest();
-      // Forces handleResponse to fire after load is complete
+      // Forces handleResponse to fire after load is complete.
       request.addEventListener('load', handleResponse);
-      // Opening request using url from result from scriptForSearch
+      // Opening request using url from result from scriptForSearch.
       request.open('GET', url);
-      // Sends request
+      // Sends request.
       request.send();
     }
 
 
-    // Creates script for search
+    // Creates script for search.
     function scriptForSearch() {
-      // Converts string entered into an array
+      // Converts string entered into an array.
       var input = searchInput.value.split(' ');
-      // scriptString holds string with +'s added
+      // scriptString holds string with +'s added.
       var scriptString = '';
-      // Holds the resulting url
+      // Holds the resulting url.
       var result = '';
 
-      // Loops through array and adds + were applicable
+      // Loops through array and adds + were applicable.
       _.each(input, function createScript(element, index) {
         // If search parameter is not the last parameter add '+'. 
         if (index != input.length - 1) {
@@ -146,7 +150,7 @@
         }
       });
       // Add custom string to google api tag.
-      result = 'https://www.googleapis.com/books/v1/volumes?q='+ scriptString;
+      result = 'https://www.googleapis.com/books/v1/volumes?q='+ 'harry+Potter';
       // Fires get function which gets the actual material from api.
       return get(result);
     }
@@ -155,7 +159,7 @@
   }
 
   // Add event listener to search button so when clicked bookApi fires.
-  searchButton.addEventListener('click', bookApi);
+  window.addEventListener('load', bookApi);
 //------------------------------------------------------------------------------
 
 /*
@@ -180,7 +184,8 @@
       _.makeElement('p', element.title, undefined, undefined, newDiv);
 
       // Create new paragraph for div to hold title and append to div.
-      _.makeElement('button', 'Add to book list', 'addBookButton', undefined, newDiv);
+      _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
+        newDiv);
 
       // Add each result on top of the last.
       var currentDiv = document.getElementById('div1');
@@ -215,7 +220,8 @@
           _.makeElement('p', element.title, undefined, undefined, newDiv);
 
           // Create star button for div.
-          _.makeElement('button', 'Set as current', 'currentBook', undefined, newDiv);
+          _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
+            newDiv);
 
           // Create remove button for div.
           _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
@@ -270,12 +276,16 @@
     _.each(listOfBooks, function(element, index) {
       // If the clicked books title equals the book in list
       if (passedThis.firstChild.innerHTML === element.title) {
+
+        currentBook = element;
         // Make book in list current book and display as such.
-        $('#bookCover').src = element.thumbnail;
-        $('#title').innerHTML = element.title;
-        $('#author').innerHTML = 'Author: ' + element.author;
-        $('#pagesRead').innerHTML = 'read' + ' read - ' + element.pagecount + ' to go!';
-        $('#percentComplete').innerHTML = 'percentDone' + '% completed!';
+        $('#bookCover').src = currentBook.thumbnail;
+        $('#title').innerHTML = currentBook.title;
+        $('#author').innerHTML = 'Author: ' + currentBook.author;
+        $('#pagesRead').innerHTML = '0 pages read - ' + currentBook.pagecount + 
+        ' pages to go!';
+        $('#percentComplete').innerHTML = '0% completed!';
+        $('#pageInput').nextSibling.onclick = pagesRead;
       }
     });
   }
@@ -283,6 +293,98 @@
 //------------------------------------------------------------------------------
 
 /*
-  - Change unneeded named functions to anonymous. ie current.
-*/
+  - When current is set make a marker that says so and remove set as current
+    button cause its already been set. When current changed put button back.
+  - Save any progress made on book if current is changed. 
+  - Need to create a button to update current page.
+*/ 
+
+//------------------------------------------------------------------------------
+  // Function to accept pages read.
+  function pagesRead() {
+    // Make input a number using parseInt.
+    var input = parseInt($('#pageInput').value);
+
+    // If input is not a number.
+    if ( isNaN(input) ) {
+      // Display this Alert under the input box.
+      $('#pageAlert').innerHTML = 'Please enter a number!';
+    } else {
+      var readPages = input;
+      var toGoPages = currentBook.pagecount - input;
+      // Clear alert if alert has been triggered pior.
+      $('#pageAlert').innerHTML = '';
+      // Clear field input
+      $('#pageInput').value = '';
+
+      $('#pagesRead').innerHTML = readPages + ' read - ' + toGoPages +
+      ' to go!';
+      $('#percentComplete').innerHTML = 'percentDone' + '% completed!';
+
+      return percentComplete;
+    }
+  }
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Function to calculate percent complete.
+  function percentComplete() {
+    
+  }
+//------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
