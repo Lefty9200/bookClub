@@ -95,8 +95,7 @@
       var convert = JSON.parse(this.responseText);
 
       // Call function to handle creation of a results object.
-      _.each(convert.items, createResult);
-      function createResult(element) {
+      _.each(convert.items, function(element) {
         // Item = element at index.
         var item = element;
 
@@ -108,7 +107,7 @@
           pagecount: item.volumeInfo.pageCount, 
           thumbnail: item.volumeInfo.imageLinks.thumbnail
         });
-      }
+      });
       // Returns searchResult to display actual information to DOM. 
       return searchResult();
     }
@@ -137,8 +136,7 @@
       var result = '';
 
       // Loops through array and adds + were applicable
-      _.each(input, createScript);
-      function createScript(element, index) {
+      _.each(input, function createScript(element, index) {
         // If search parameter is not the last parameter add '+'. 
         if (index != input.length - 1) {
           scriptString += input[index] + '+'; 
@@ -146,7 +144,7 @@
           // If search paramter is the last one don't add '+'.
           scriptString += input[index];
         }
-      }
+      });
       // Add custom string to google api tag.
       result = 'https://www.googleapis.com/books/v1/volumes?q='+ scriptString;
       // Fires get function which gets the actual material from api.
@@ -165,14 +163,14 @@
     empty on 'click' and on 'input'. So when user it filling alert goes away.
   - Need to make the return key work for search.
   - Make it so api doesn't grab sample books or duplicates.
+  - Need to fix issue where if thumbnail is undefined it will still run.
 */
 
 //------------------------------------------------------------------------------
   // Populate search results.
   function searchResult() {
-    // Iterate over searchResponse and fire createDiv on each.
-    _.each(searchResponse, createDiv);
-    function createDiv(element) {
+    // Iterate over searchResponse and fire function to create Div on each.
+    _.each(searchResponse, function(element) {
       // Create new div for each search result.
       var newDiv = document.createElement('div');
       // Give div a class name for styling.
@@ -190,7 +188,7 @@
 
       // Add an onclick referance to addTolistOfBooks for earch new div.
       newDiv.lastChild.onclick = addTolistOfBooks;
-    }
+    });
   }
 //------------------------------------------------------------------------------
 
@@ -201,9 +199,8 @@
     // Save the div that was added from the previous funciton to variable.
     var passedThis = this.parentNode.firstChild.innerHTML;
 
-    // Loop through searchvresponses to compare titles to clicked element.
-    _.each(searchResponse, pushToList);
-    function pushToList(element) {
+    // Loop through search responses to compare titles to clicked element.
+    _.each(searchResponse, function(element) {
       // If they match push element from search list to book list.
       if (passedThis === element.title) {
         listOfBooks.push(element);
@@ -233,7 +230,7 @@
         // Fire createDiv function.
         return createDiv();
       }
-    }
+    });
   }
 //------------------------------------------------------------------------------
 
@@ -248,19 +245,17 @@
     // Save passed this to variable.
     var passedThis = this.parentNode;
 
-    // Iterate over list of books and apply removeFromList function.
-    _.each(listOfBooks, removeFromList);
-    function removeFromList(element, index) {
+    // Iterate over list of books and apply a function to remove from list.
+    _.each(listOfBooks, function(element, index) {
       // If the listOfBooks objects title is equal to the clicked objects title
       // remove this object from list
       if (passedThis.firstChild.innerHTML === element.title) {
         // Remove this object from list.
-        listOfBooks.splice(index, 1);
-        
+        listOfBooks.splice(index, 1);        
         // Remove object from DOM.
         passedThis.remove();
       }
-    } 
+    });
   }
 //------------------------------------------------------------------------------
 
@@ -270,11 +265,13 @@
   function createCurrent() {
     // Save passed this to variable.
     var passedThis = this.parentNode;
+
     // Loop through list of books to compare to book clicked.
     _.each(listOfBooks, function(element, index) {
       // If the clicked books title equals the book in list
       if (passedThis.firstChild.innerHTML === element.title) {
-        // Make book in list current book an display as such.
+        // Make book in list current book and display as such.
+        $('#bookCover').src = element.thumbnail;
         $('#title').innerHTML = element.title;
         $('#author').innerHTML = 'Author: ' + element.author;
         $('#pagesRead').innerHTML = 'read' + ' read - ' + element.pagecount + ' to go!';
