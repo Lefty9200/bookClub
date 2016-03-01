@@ -76,7 +76,7 @@
     var listOfBooks = [];
     // Array of completed books.
     var completedBooks = [];
-    // Current Book.
+    // currentBook variable points to element.
     var currentBook = {};
 //------------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@
         }
       });
       // Add custom string to google api tag.
-      result = 'https://www.googleapis.com/books/v1/volumes?q='+ 'harry+Potter';
+      result = 'https://www.googleapis.com/books/v1/volumes?q='+ scriptString;
       // Fires get function which gets the actual material from api.
       return get(result);
     }
@@ -159,7 +159,7 @@
   }
 
   // Add event listener to search button so when clicked bookApi fires.
-  window.addEventListener('load', bookApi);
+  searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
 
 /*
@@ -277,12 +277,13 @@
       // If the clicked books title equals the book in list
       if (passedThis.firstChild.innerHTML === element.title) {
 
+        // currentBook variable points to element
         currentBook = element;
         // Make book in list current book and display as such.
         $('#bookCover').src = currentBook.thumbnail;
         $('#title').innerHTML = currentBook.title;
         $('#author').innerHTML = 'Author: ' + currentBook.author;
-        $('#pagesRead').innerHTML = '0 pages read - ' + currentBook.pagecount + 
+        $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + currentBook.pagecount + 
         ' pages to go!';
         $('#percentComplete').innerHTML = '0% completed!';
         $('#pageInput').nextSibling.onclick = pagesRead;
@@ -310,18 +311,22 @@
       // Display this Alert under the input box.
       $('#pageAlert').innerHTML = 'Please enter a number!';
     } else {
-      var readPages = input;
-      var toGoPages = currentBook.pagecount - input;
+      // Set current page of current book.
+      currentBook.progress = input;
+      // Pages before finished.
+      var toGoPages = currentBook.pagecount - currentBook.progress;
+
       // Clear alert if alert has been triggered pior.
       $('#pageAlert').innerHTML = '';
       // Clear field input
       $('#pageInput').value = '';
 
-      $('#pagesRead').innerHTML = readPages + ' read - ' + toGoPages +
-      ' to go!';
-      $('#percentComplete').innerHTML = 'percentDone' + '% completed!';
+      // Display pages read in reference to pages left.
+      $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + toGoPages 
+        + ' to go!';
 
-      return percentComplete;
+      $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
+        currentBook.pagecount) * 100) + '% completed!';
     }
   }
 //------------------------------------------------------------------------------
@@ -330,10 +335,12 @@
 //------------------------------------------------------------------------------
   // Function to calculate percent complete.
   function percentComplete() {
-    
+
   }
 //------------------------------------------------------------------------------
 
+// gonna need to make current every time changes need to make that populate pages
+// need to make pages read update progress of individual books.
 
 
 
