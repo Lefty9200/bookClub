@@ -73,7 +73,7 @@
     // Array of search results.
     var searchResponse = [];
     // Array of books on list.
-    var listofBooks = [];
+    var listOfBooks = [];
     // Array of completed books.
     var completedBooks = [];
 //------------------------------------------------------------------------------
@@ -188,16 +188,16 @@
       var currentDiv = document.getElementById('div1');
       document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
 
-      // Add an onclick referance to addToListofBooks for earch new div.
-      newDiv.lastChild.onclick = addToListofBooks;
+      // Add an onclick referance to addTolistOfBooks for earch new div.
+      newDiv.lastChild.onclick = addTolistOfBooks;
     }
   }
 //------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
-  // Add book to listofbooks array.
-  function addToListofBooks() {
+  // Add book to listOfBooks array.
+  function addTolistOfBooks() {
     // Save the div that was added from the previous funciton to variable.
     var passedThis = this.parentNode.firstChild.innerHTML;
 
@@ -206,7 +206,7 @@
     function pushToList(element) {
       // If they match push element from search list to book list.
       if (passedThis === element.title) {
-        listofBooks.push(element);
+        listOfBooks.push(element);
 
         // Also create a div with the added books info to display to user.
         function createDiv() {
@@ -249,13 +249,13 @@
     var passedThis = this.parentNode;
 
     // Iterate over list of books and apply removeFromList function.
-    _.each(listofBooks, removeFromList);
+    _.each(listOfBooks, removeFromList);
     function removeFromList(element, index) {
-      // If the listofBooks objects title is equal to the clicked objects title
+      // If the listOfBooks objects title is equal to the clicked objects title
       // remove this object from list
       if (passedThis.firstChild.innerHTML === element.title) {
         // Remove this object from list.
-        listofBooks.splice(index, 1);
+        listOfBooks.splice(index, 1);
         
         // Remove object from DOM.
         passedThis.remove();
@@ -266,10 +266,26 @@
 
 
 //------------------------------------------------------------------------------
-  // Create selected book
+  // Create selected book.
   function createCurrent() {
-    
+    // Save passed this to variable.
+    var passedThis = this.parentNode;
+    // Loop through list of books to compare to book clicked.
+    _.each(listOfBooks, function(element, index) {
+      // If the clicked books title equals the book in list
+      if (passedThis.firstChild.innerHTML === element.title) {
+        // Make book in list current book an display as such.
+        $('#title').innerHTML = element.title;
+        $('#author').innerHTML = 'Author: ' + element.author;
+        $('#pagesRead').innerHTML = 'read' + ' read - ' + element.pagecount + ' to go!';
+        $('#percentComplete').innerHTML = 'percentDone' + '% completed!';
+      }
+    });
   }
 
 //------------------------------------------------------------------------------
+
+/*
+  - Change unneeded named functions to anonymous. ie current.
+*/
 
