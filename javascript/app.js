@@ -47,18 +47,10 @@
     // Create add new element for a parent element.
     var newElement = document.createElement(type);
 
-    if (text != undefined) {
-      // Set element.
-      newElement.innerHTML = text;
-    }
-    if (elementClass != undefined) {
-      // Give element class name for styling.
-      newElement.className = elementClass;
-    }
-    if (id != undefined) {
-      // Set element id.
-      newElement.id = id;
-    }
+    // Used ternary operators to make new elements if function provided values.
+    text != undefined ? newElement.innerHTML = text : undefined;
+    elementClass != undefined ? newElement.className = elementClass : undefined;
+    id != undefined ? newElement.id = id : undefined;
 
     // Append button to div after paragraph is already appended so its last.
     return parentElement.appendChild(newElement);
@@ -298,6 +290,7 @@
 //------------------------------------------------------------------------------
 
 /*
+  - Hide/show current page.
   - When current is set make a marker that says so and remove set as current
     button cause its already been set. When current changed put button back.
   - Save any progress made on book if current is changed. 
@@ -337,21 +330,19 @@
 
 
 //------------------------------------------------------------------------------
-  // Function to calculate percent complete.
-  // if (currentBook.progress === currentBook.pagecount) {
-  //   $('#pagesRead').innerHTML = 'All pages read!';
-  //   $('#percentComplete').innerHTML = 'You have completed the book!';
-    
+  // Function for completed list
 
-  // }
 //------------------------------------------------------------------------------
 
-// gonna need to make current every time changes need to make that populate pages
-// need to make pages read update progress of individual books.
 
 
-
-
+// Collectin Methods
+//each.
+// map.
+// filter.
+// reduce!!!!!
+// rewrite collection function from underscore
+// practice explaining line by line before youe write 
 
 
 
