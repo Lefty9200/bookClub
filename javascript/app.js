@@ -55,6 +55,20 @@
     // Append button to div after paragraph is already appended so its last.
     return parentElement.appendChild(newElement);
   }
+
+  // Make method to check if an object is empty.
+  _.isItEmpty = function(object) {
+    // Loop through object. Not really a loop cause looking for one key.
+    for(var key in object) {
+      // Check if object has property. In this case any property.
+      if(object.hasOwnProperty(key)) {
+        // If it has a property return false cuase not empty.
+        return false;
+      }
+    }
+    // If it doesn't have a property return true cause empty. 
+    return true;
+  }    
 //------------------------------------------------------------------------------
 
 
@@ -73,6 +87,17 @@
 //------------------------------------------------------------------------------
 
 
+//------------------------------------------------------------------------------
+  function checkIfCurrent(arg) {
+    if (_.isItEmpty(arg)) {
+      // Leave current book html elements empty.
+
+      // Make pageInput hidden because current book not selected.
+      $('#pageInput').style.display = 'none';
+    } 
+  }
+  // Fire checkIfCurrent with currentBook object as an argument.
+  checkIfCurrent(currentBook);
 //------------------------------------------------------------------------------
   // Retrieve API results.
   function bookApi() {
@@ -278,15 +303,19 @@
         $('#bookCover').src = currentBook.thumbnail;
         $('#title').innerHTML = currentBook.title;
         $('#author').innerHTML = 'Author: ' + currentBook.author;
-        $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + currentBook.pagecount + 
-        ' pages to go!';
+        $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + 
+          currentBook.pagecount + ' pages to go!';
         $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
           currentBook.pagecount) * 100) + '% completed!';
-        $('#pageInput').nextSibling.onclick = pagesRead;
+
+        // Make page input visible for use.
+        $('#pageInput').style.display = 'block';
+
+        // Set pageInputs button onclick to pagesRead function.
+        $('#pageInput').lastChild.onclick = pagesRead;
       }
     });
   }
-
 //------------------------------------------------------------------------------
 
 /*
@@ -301,7 +330,7 @@
   // Function to accept pages read.
   function pagesRead() {
     // Make input a number using parseInt.
-    var input = parseInt($('#pageInput').value);
+    var input = parseInt($('#pageInput').firstChild.value);
 
     // If input is not a number.
     if ( isNaN(input) ) {
@@ -321,7 +350,7 @@
       // Display pages read in reference to pages left.
       $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + toGoPages 
         + ' to go!';
-
+      // Display percent complete. Used Math.floor to get whole number.
       $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
         currentBook.pagecount) * 100) + '% completed!';
     }
@@ -329,20 +358,8 @@
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Function for completed list
-
-//------------------------------------------------------------------------------
 
 
-
-// Collectin Methods
-//each.
-// map.
-// filter.
-// reduce!!!!!
-// rewrite collection function from underscore
-// practice explaining line by line before youe write 
 
 
 
