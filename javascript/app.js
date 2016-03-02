@@ -88,13 +88,39 @@
 
 
 //------------------------------------------------------------------------------
+  // Function for setting html elements to current book.
+  function setCurrent(arg) {
+    // Make book in list current book and display as such.
+    $('#bookCover').src = currentBook.thumbnail;
+    $('#title').innerHTML = currentBook.title;
+    $('#author').innerHTML = 'Author: ' + currentBook.author;
+    $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + 
+      currentBook.pagecount + ' pages to go!';
+    $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
+      currentBook.pagecount) * 100) + '% completed!';
+
+    // Make page input visible for use.
+    $('#pageInput').style.display = 'block';
+
+    // Set pageInputs button onclick to pagesRead function.
+    $('#pageInput').lastChild.onclick = pagesRead;
+  }
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Function to hide current books info unless current book is already selected
+  // Thinking of future functionality when saving lists to a database.
   function checkIfCurrent(arg) {
+    // If currentBook object is empty do this.
     if (_.isItEmpty(arg)) {
       // Leave current book html elements empty.
-
       // Make pageInput hidden because current book not selected.
       $('#pageInput').style.display = 'none';
-    } 
+    } else {
+      // if not empty set currentBook html elements to currentBooks data.
+      return setCurrent(currentBook);
+    }
   }
   // Fire checkIfCurrent with currentBook object as an argument.
   checkIfCurrent(currentBook);
@@ -296,23 +322,10 @@
     _.each(listOfBooks, function(element, index) {
       // If the clicked books title equals the book in list
       if (passedThis.firstChild.innerHTML === element.title) {
-
         // currentBook variable points to element
         currentBook = element;
-        // Make book in list current book and display as such.
-        $('#bookCover').src = currentBook.thumbnail;
-        $('#title').innerHTML = currentBook.title;
-        $('#author').innerHTML = 'Author: ' + currentBook.author;
-        $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + 
-          currentBook.pagecount + ' pages to go!';
-        $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
-          currentBook.pagecount) * 100) + '% completed!';
 
-        // Make page input visible for use.
-        $('#pageInput').style.display = 'block';
-
-        // Set pageInputs button onclick to pagesRead function.
-        $('#pageInput').lastChild.onclick = pagesRead;
+        return setCurrent(currentBook);
       }
     });
   }
