@@ -90,7 +90,7 @@
     // Clear any previous search results.
     searchResponse = [];
     $('#searchResults').innerHTML = '';
-    
+
     // Add information needed for app to a usable array named searchResponse.
     function handleResponse() {
       // Parse JSON Data for use.
@@ -111,6 +111,9 @@
           // progress added to track book complettion if added to list
           progress: 0
         });
+
+        // Clear Search Input.
+        $('#searchInput').value = '';
       });
       // Returns searchResult to display actual information to DOM. 
       return searchResult();
@@ -140,7 +143,7 @@
       var result = '';
 
       // Loops through array and adds + were applicable.
-      _.each(input, function createScript(element, index) {
+      _.each(input, function(element, index) {
         // If search parameter is not the last parameter add '+'. 
         if (index != input.length - 1) {
           scriptString += input[index] + '+'; 
@@ -156,8 +159,8 @@
     }
     // Fires scriptForSearch function to create custom search based on input.
     return scriptForSearch();
-  }
 
+  }
   // Add event listener to search button so when clicked bookApi fires.
   searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
@@ -285,7 +288,8 @@
         $('#author').innerHTML = 'Author: ' + currentBook.author;
         $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + currentBook.pagecount + 
         ' pages to go!';
-        $('#percentComplete').innerHTML = '0% completed!';
+        $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
+          currentBook.pagecount) * 100) + '% completed!';
         $('#pageInput').nextSibling.onclick = pagesRead;
       }
     });
@@ -334,9 +338,12 @@
 
 //------------------------------------------------------------------------------
   // Function to calculate percent complete.
-  function percentComplete() {
+  // if (currentBook.progress === currentBook.pagecount) {
+  //   $('#pagesRead').innerHTML = 'All pages read!';
+  //   $('#percentComplete').innerHTML = 'You have completed the book!';
+    
 
-  }
+  // }
 //------------------------------------------------------------------------------
 
 // gonna need to make current every time changes need to make that populate pages
