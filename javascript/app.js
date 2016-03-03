@@ -76,6 +76,8 @@
   // Global variables.
     // Button for search.
     var searchButton = $('#searchButton');
+    // Variable for search parameters.
+    var searchInput = $('#searchInput');
     // Array of search results.
     var searchResponse = [];
     // Array of books on list.
@@ -127,8 +129,12 @@
 //------------------------------------------------------------------------------
   // Retrieve API results.
   function bookApi() {
-    // Variable for search parameters.
-    var searchInput = $('#searchInput');
+    // Display error if no input value was given when search button pressed.
+    if (searchInput.value.length === 0) {
+      $('#alertStatement').innerHTML = 'Please enter a search parameter!';
+    } else {
+      $('#alertStatement').innerHTML = '';
+    }
     
     // Clear any previous search results.
     searchResponse = [];
@@ -206,14 +212,13 @@
   }
   // Add event listener to search button so when clicked bookApi fires.
   searchButton.addEventListener('click', bookApi);
+
 //------------------------------------------------------------------------------
 
 /*
-  - Need to add alerts back into search. It needs to alert when search input is 
-    empty on 'click' and on 'input'. So when user it filling alert goes away.
-  - Need to make the return key work for search.
   - Make it so api doesn't grab sample books or duplicates.
-  - Need to fix issue where if thumbnail is undefined it will still run.
+  - Need to fix issue where if thumbnail is undefined it won't run.
+  - Make alerts more specific. when typing in it will clear alert, etc.
 */
 
 //------------------------------------------------------------------------------
@@ -243,6 +248,10 @@
   }
 //------------------------------------------------------------------------------
 
+/*
+  - Need to make search results display synopsys and author.
+  - Need to make button to collapse search results.
+*/
 
 //------------------------------------------------------------------------------
   // Add book to listOfBooks array.
@@ -318,6 +327,18 @@
     // Save passed this to variable.
     var passedThis = this.parentNode;
 
+    // If there is a current book already.
+    if ($('#selected')) {
+      // Remove Id of selected book.
+      $('#selected').removeAttribute('id');
+    }
+
+    // Give clicked book in book list id of selected.
+    passedThis.id = 'selected';
+
+    // Clear alert if alert has been triggered prior.
+    $('#pageAlert').innerHTML = '';
+
     // Loop through list of books to compare to book clicked.
     _.each(listOfBooks, function(element, index) {
       // If the clicked books title equals the book in list
@@ -332,11 +353,8 @@
 //------------------------------------------------------------------------------
 
 /*
-  - Hide/show current page.
   - When current is set make a marker that says so and remove set as current
     button cause its already been set. When current changed put button back.
-  - Save any progress made on book if current is changed. 
-  - Need to create a button to update current page.
 */ 
 
 //------------------------------------------------------------------------------
@@ -344,39 +362,89 @@
   function pagesRead() {
     // Make input a number using parseInt.
     var input = parseInt($('#pageInput').firstChild.value);
+    // Clear input to placeholder
+    $('#pageInput').firstChild.value = '';
 
     // If input is not a number.
     if ( isNaN(input) ) {
       // Display this Alert under the input box.
       $('#pageAlert').innerHTML = 'Please enter a number!';
     } else {
-      // Set current page of current book.
-      currentBook.progress = input;
-      // Pages before finished.
-      var toGoPages = currentBook.pagecount - currentBook.progress;
+      // If input is less than zero or greater than total bages in book.
+      if (input > currentBook.pagecount || input <= 0) {
+        // Display this alert.
+        $('#pageAlert').innerHTML = 'Page number enterd does not exist!';
+      } else {
+        // Set current page of current book.
+        currentBook.progress = input;
 
-      // Clear alert if alert has been triggered pior.
-      $('#pageAlert').innerHTML = '';
-      // Clear field input
-      $('#pageInput').value = '';
+        // Clear alert if alert has been triggered pior.
+        $('#pageAlert').innerHTML = '';
+        // Clear field input
+        $('#pageInput').value = '';
+  
+        // Pages before finished.
+        var toGoPages = currentBook.pagecount - currentBook.progress;
 
-      // Display pages read in reference to pages left.
-      $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + toGoPages 
-        + ' to go!';
-      // Display percent complete. Used Math.floor to get whole number.
-      $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
-        currentBook.pagecount) * 100) + '% completed!';
+
+        // Display pages read in reference to pages left.
+        $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + 
+          toGoPages + ' to go!';
+        // Display percent complete. Used Math.floor to get whole number.
+        $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
+          currentBook.pagecount) * 100) + '% completed!';
+
+          if (currentBook.progress === currentBook.pagecount) {
+            // Update alert to pick new book.
+            $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
+
+            // Fire the completed function to remove book from completed & list
+            return completed();
+          }
+        }
+      }
     }
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Completed
+  function completed() {
+    // Iterate over list of books and apply a function to remove from list.
+    _.each(listOfBooks, function(element, index) {
+      // If the books title in listOfBooks equals the clicked completed title
+      if (currentBook === element) {
+        // Push book to completed list. 
+        completedBooks.push(element);
+        // Then Remove book from list of books.
+        listOfBooks.splice(index, 1);        
+        // Also remove book from DOM.
+        $('#selected').remove();
+      }
+    });
+    return addToCompletedBooks();
   }
 //------------------------------------------------------------------------------
 
 
+//------------------------------------------------------------------------------
+  // Add Completed Books to DOM.
+  function addToCompletedBooks() {
+    // Loop through completed books array to update DOM with current completed.
+    _.each(completedBooks, function(element) {
+      // Create new div. 
+      var newDiv = document.createElement('div');
+      newDiv.className = 'completed';
 
+      // Create new paragraph for div.
+      _.makeElement('p', element.title, undefined, undefined, newDiv);
 
-
-
-
-
+      // Add each book on top of the last.
+      var currentDiv = document.getElementById('div1');
+      document.getElementById('completedBooks').insertBefore(newDiv, currentDiv);
+    });
+  }
+//------------------------------------------------------------------------------
 
 
 
