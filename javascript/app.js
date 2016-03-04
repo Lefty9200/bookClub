@@ -13,7 +13,7 @@
     return el.querySelector(selector);
   }
 
-  // QuerySelector. For document.getElementByClassName. 
+  // QuerySelector. for .getElementByClassName. 
   var $$ = function(selector, el) {
     // If element is not given as an argument.
     if (!el) {
@@ -26,8 +26,9 @@
 
   // each method so I don't have to keep writing for loops. 
   _.each = function(list, callback) {
-    // If list is an array loop through use a standard for loop.
+    // If list is an array
     if (Array.isArray(list)) {
+      // Loop through use a standard for loop.
       for (var i = 0; i < list.length; i++) {
         // Calls function to be used at a later time passing element, index and
         // complete list for later use.
@@ -62,7 +63,7 @@
     for(var key in object) {
       // Check if object has property. In this case any property.
       if(object.hasOwnProperty(key)) {
-        // If it has a property return false cuase not empty.
+        // If it has a property return false because not empty.
         return false;
       }
     }
@@ -84,7 +85,7 @@
     var listOfBooks = [];
     // Array of completed books.
     var completedBooks = [];
-    // currentBook variable points to element.
+    // CurrentBook variable points to element.
     var currentBook = {};
 //------------------------------------------------------------------------------
 
@@ -109,6 +110,9 @@
   }
 //------------------------------------------------------------------------------
 
+/*
+  - Need to create cometed button for current book.
+*/
 
 //------------------------------------------------------------------------------
   // Function to hide current books info unless current book is already selected
@@ -126,6 +130,44 @@
   }
   // Fire checkIfCurrent with currentBook object as an argument.
   checkIfCurrent(currentBook);
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Populate search results.
+  function searchResult() {
+    // Iterate over searchResponse and fire function to create Div on each.
+    _.each(searchResponse, function(element, index) {
+      // Create new div for each search result.
+      var newDiv = document.createElement('div');
+      // Give div a class name for styling.
+      newDiv.className = 'searchResult';
+      newDiv.id = index;
+
+
+      // Create new paragraph for div to hold title and append to div.
+      _.makeElement('p', element.title, undefined, undefined, newDiv);
+
+      // Create new paragraph for div to hold title and append to div.
+      _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
+        newDiv);
+
+      // Add each result on top of the last.
+      var currentDiv = document.getElementById('div1');
+      document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
+
+      // Add an onclick referance to addTolistOfBooks for earch new div.
+      newDiv.lastChild.onclick = addTolistOfBooks;
+    });
+  }
+//------------------------------------------------------------------------------
+
+  /*
+    - Need to make search results display title, author and synopsys.
+    - Need to make button to collapse search results.
+    - Need to make button to clear search.
+  */  
+
 //------------------------------------------------------------------------------
   // Retrieve API results.
   function bookApi() {
@@ -146,19 +188,15 @@
       var convert = JSON.parse(this.responseText);
 
       // Call function to handle creation of a results object.
-      _.each(convert.items, function(element) {
-        // Item = element at index.
-        var item = element;
+      _.each(convert.items, function(element, index) {
 
         // Create object out of api results and push to global variable for use.
         searchResponse.push({ 
-          title: item.volumeInfo.title,
-          author: item.volumeInfo.authors[0],
-          description: item.volumeInfo.description,
-          pagecount: item.volumeInfo.pageCount, 
-          thumbnail: item.volumeInfo.imageLinks.thumbnail,
-          // progress added to track book complettion if added to list
-          progress: 0
+          title: element.volumeInfo.title,
+          author: element.volumeInfo.authors[0],
+          description: element.volumeInfo.description,
+          pagecount: element.volumeInfo.pageCount, 
+          thumbnail: element.volumeInfo.imageLinks.thumbnail,
         });
 
         // Clear Search Input.
@@ -195,10 +233,10 @@
       _.each(input, function(element, index) {
         // If search parameter is not the last parameter add '+'. 
         if (index != input.length - 1) {
-          scriptString += input[index] + '+'; 
+          scriptString += element + '+'; 
         } else {
           // If search paramter is the last one don't add '+'.
-          scriptString += input[index];
+          scriptString += element;
         }
       });
       // Add custom string to google api tag.
@@ -215,55 +253,19 @@
 
 //------------------------------------------------------------------------------
 
-/*
-  - Make it so api doesn't grab sample books or duplicates.
-  - Need to fix issue where if thumbnail is undefined it won't run.
-  - Make alerts more specific. when typing in it will clear alert, etc.
-*/
-
-//------------------------------------------------------------------------------
-  // Populate search results.
-  function searchResult() {
-    // Iterate over searchResponse and fire function to create Div on each.
-    _.each(searchResponse, function(element) {
-      // Create new div for each search result.
-      var newDiv = document.createElement('div');
-      // Give div a class name for styling.
-      newDiv.className = 'searchResult';
-
-      // Create new paragraph for div to hold title and append to div.
-      _.makeElement('p', element.title, undefined, undefined, newDiv);
-
-      // Create new paragraph for div to hold title and append to div.
-      _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
-        newDiv);
-
-      // Add each result on top of the last.
-      var currentDiv = document.getElementById('div1');
-      document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-
-      // Add an onclick referance to addTolistOfBooks for earch new div.
-      newDiv.lastChild.onclick = addTolistOfBooks;
-    });
-  }
-//------------------------------------------------------------------------------
-
-/*
-  - Need to make search results display synopsys and author.
-  - Need to make button to collapse search results.
-*/
-
 //------------------------------------------------------------------------------
   // Add book to listOfBooks array.
   function addTolistOfBooks() {
-    // Save the div that was added from the previous funciton to variable.
-    var passedThis = this.parentNode.firstChild.innerHTML;
-
-    // Loop through search responses to compare titles to clicked element.
-    _.each(searchResponse, function(element) {
+    // Save the div that was added from the previous function to variable.
+    var passedThis = parseInt(this.parentNode.id);
+    // Loop through search responses to compare index to clicked element.
+    _.each(searchResponse, function(element, index) {
       // If they match push element from search list to book list.
-      if (passedThis === element.title) {
+      if (passedThis === index) {
         listOfBooks.push(element);
+
+        // Target book added to list and add the progress property to element.
+        listOfBooks[listOfBooks.length -1].progress = 0;
 
         // Also create a div with the added books info to display to user.
         function createDiv() {
@@ -296,8 +298,8 @@
 //------------------------------------------------------------------------------
 
 /*
-  - Need to fix multiples being added to list. Think another loop and if 
-    statement to check against elements already existing in list is all we need.
+  - Need to make button to collapse book list.
+  - Need to display title and author.
 */
 
 //------------------------------------------------------------------------------
@@ -305,6 +307,22 @@
   function removeBook() {
     // Save passed this to variable.
     var passedThis = this.parentNode;
+
+    // If book being removed is current.
+    if (passedThis.firstChild.innerHTML === currentBook.title) {
+      // Clear current object.
+      currentBook = {};
+
+      // Current DOM elements need to be cleared.
+      $('#bookCover').src = '';
+      $('#title').innerHTML = '';
+      $('#author').innerHTML = '';
+      $('#pagesRead').innerHTML = '';
+      $('#percentComplete').innerHTML = '';
+
+      // Make page input visible for use.
+      $('#pageInput').style.display = 'none'; 
+    }
 
     // Iterate over list of books and apply a function to remove from list.
     _.each(listOfBooks, function(element, index) {
@@ -346,16 +364,13 @@
         // currentBook variable points to element
         currentBook = element;
 
+        //  Set Current html elements to currentBook.
         return setCurrent(currentBook);
       }
     });
   }
 //------------------------------------------------------------------------------
 
-/*
-  - When current is set make a marker that says so and remove set as current
-    button cause its already been set. When current changed put button back.
-*/ 
 
 //------------------------------------------------------------------------------
   // Function to accept pages read.
@@ -408,13 +423,13 @@
 
 
 //------------------------------------------------------------------------------
-  // Completed
+  // Completed books array.
   function completed() {
     // Iterate over list of books and apply a function to remove from list.
     _.each(listOfBooks, function(element, index) {
-      // If the books title in listOfBooks equals the clicked completed title
+      // If the current book object equals a object in listOfBooks.
       if (currentBook === element) {
-        // Push book to completed list. 
+        // Push book to completed list form listOfBooks. 
         completedBooks.push(element);
         // Then Remove book from list of books.
         listOfBooks.splice(index, 1);        
@@ -422,6 +437,7 @@
         $('#selected').remove();
       }
     });
+    // Add completed book to DOM.
     return addToCompletedBooks();
   }
 //------------------------------------------------------------------------------
@@ -448,9 +464,15 @@
 
 
 
-
-
-
+/*
+  // Still to go:
+  - Need to finish getting rid of javascript issues.
+  - Need to read through code and make sure its as clean as can be.
+  - Need to Style page.
+  - Need to check against requirements.
+  - Need to get up on github pages.
+  - Need to submit.
+*/ 
 
 
 
