@@ -79,6 +79,8 @@
     var searchButton = $('#searchButton');
     // Variable for search parameters.
     var searchInput = $('#searchInput');
+    // Variable for search clear.
+    var searchClear = $('#clear');
     // Array of search results.
     var searchResponse = [];
     // Array of books on list.
@@ -165,7 +167,6 @@
   /*
     - Need to make search results display title, author and synopsys.
     - Need to make button to collapse search results.
-    - Need to make button to clear search.
   */  
 
 //------------------------------------------------------------------------------
@@ -482,6 +483,23 @@
       var currentDiv = document.getElementById('div1');
       document.getElementById('completedBooks').insertBefore(newDiv, currentDiv);
     });
+  }
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // If clear search button had been pressed
+  searchClear.onclick = clearSearch;
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Clear any previous search results.
+  function clearSearch() {
+    // Clear Search array.
+    searchResponse = [];
+    // Clear Search DOM.
+    $('#searchResults').innerHTML = '';
   }
 //------------------------------------------------------------------------------
 
