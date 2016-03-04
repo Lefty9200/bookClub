@@ -106,13 +106,13 @@
     $('#pageInput').style.display = 'block';
 
     // Set pageInputs button onclick to pagesRead function.
-    $('#pageInput').lastChild.onclick = pagesRead;
+    $('#pageInput').firstChild.nextSibling.onclick = pagesRead;
+
+    // Set pageInputs button onclick to pagesRead function.
+    $('#pageInput').lastChild.onclick = markAsComplete;
   }
 //------------------------------------------------------------------------------
 
-/*
-  - Need to create cometed button for current book.
-*/
 
 //------------------------------------------------------------------------------
   // Function to hide current books info unless current book is already selected
@@ -420,6 +420,29 @@
       }
     }
 //------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // If mark as complete button clicked.
+  function markAsComplete() {
+
+   // Clear alert if alert has been triggered pior.
+   $('#pageAlert').innerHTML = '';
+   // Clear field input
+   $('#pageInput').value = '';
+
+   // Display pages read in reference to pages left.
+   $('#pagesRead').innerHTML = currentBook.pagecount + ' read - ' + 
+     currentBook.pagecount + ' to go!';
+   // Display percent complete. Used Math.floor to get whole number.
+   $('#percentComplete').innerHTML = '100% completed!';
+
+   // Update alert to pick new book.
+   $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
+
+   // Fire the completed function to remove book from completed & list
+   return completed(); 
+  }
 
 
 //------------------------------------------------------------------------------
