@@ -13,17 +13,6 @@
     return el.querySelector(selector);
   }
 
-  // QuerySelector. for .getElementByClassName. 
-  var $$ = function(selector, el) {
-    // If element is not given as an argument.
-    if (!el) {
-      // el is equal to the document object.
-      el = document;
-    }
-    // Returns value of selector as an array of all elements with class. 
-    return Array.prototype.slice.call(el.querySelectorAll(selector));
-  }
-
   // each method so I don't have to keep writing for loops. 
   _.each = function(list, callback) {
     // If list is an array
@@ -81,6 +70,10 @@
     var searchInput = $('#searchInput');
     // Variable for search clear.
     var searchClear = $('#clear');
+    // Variable for booklist toggle.
+    var toggleBookList = $('#toggleBookList');
+    // Variable for completed list toggle.
+    var toggleCompletedList = $('#toggleCompletedList');
     // Array of search results.
     var searchResponse = [];
     // Array of books on list.
@@ -100,7 +93,7 @@
     $('#title').innerHTML = currentBook.title;
     $('#author').innerHTML = 'Author: ' + currentBook.author;
     $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + 
-      currentBook.pagecount + ' pages to go!';
+      (currentBook.pagecount - currentBook.progress) + ' pages to go!';
     $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
       currentBook.pagecount) * 100) + '% completed!';
 
@@ -488,14 +481,8 @@
 
 
 //------------------------------------------------------------------------------
-  // If clear search button had been pressed
-  searchClear.onclick = clearSearch;
-//------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------
-  // Clear any previous search results.
-  function clearSearch() {
+  // If clear search button pressed
+  searchClear.onclick = function clearSearch() {
     // Clear Search array.
     searchResponse = [];
     // Clear Search DOM.
@@ -503,6 +490,25 @@
   }
 //------------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------------------
+  // On toggle click fire hide/show book list. 
+  toggleBookList.onclick = function() {
+    if ($('#bookList').style.display === 'none') {
+      $('#bookList').style.display = 'block';
+    } else {
+      $('#bookList').style.display = 'none';
+    }
+  };
+  // On toggle click fire hide/show completed list.
+  toggleCompletedList.onclick = function() {
+    if ($('#completedBooks').style.display === 'none') {
+      $('#completedBooks').style.display = 'block';
+    } else {
+      $('#completedBooks').style.display = 'none';
+    }
+  };
+//------------------------------------------------------------------------------
 
 
 /*
