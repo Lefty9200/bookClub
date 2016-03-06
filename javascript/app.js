@@ -247,47 +247,59 @@
 
 //------------------------------------------------------------------------------
 
+
 //------------------------------------------------------------------------------
   // Add book to listOfBooks array.
   function addTolistOfBooks() {
-    // Save the div that was added from the previous function to variable.
-    var passedThis = parseInt(this.parentNode.id);
-    // Loop through search responses to compare index to clicked element.
-    _.each(searchResponse, function(element, index) {
-      // If they match push element from search list to book list.
-      if (passedThis === index) {
-        listOfBooks.push(element);
+    // Save the ID of the that was div added from the previous function.
+    var passedThis = this.parentNode;
+    var flag = true;
 
-        // Target book added to list and add the progress property to element.
-        listOfBooks[listOfBooks.length -1].progress = 0;
-
-        // Also create a div with the added books info to display to user.
-        function createDiv() {
-          // Create new div. 
-          var newDiv = document.createElement('div');
-          newDiv.className = 'book';
-
-          // Create new paragraph for div.
-          _.makeElement('p', element.title, undefined, undefined, newDiv);
-
-          // Create star button for div.
-          _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
-            newDiv);
-
-          // Create remove button for div.
-          _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
-
-          // Add each book on top of the last.
-          var currentDiv = document.getElementById('div1');
-          document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-          // Set new buttons onclick to funciton.
-          newDiv.lastChild.previousSibling.onclick = createCurrent;
-          newDiv.lastChild.onclick = removeBook;
-        }
-        // Fire createDiv function.
-        return createDiv();
+    for (var i = 0; i < listOfBooks.length; i++) {
+      if (listOfBooks[i].title === passedThis.firstChild.innerHTML) {
+        flag = false;
       }
-    });
+    }
+
+    if (flag) {
+      // Loop through search responses to compare index to clicked element.
+      _.each(searchResponse, function(element, index) {
+        // If they match push element from search list to book list.
+        if (parseInt(passedThis.id) === index) {
+          // Push matching book from searchResponses to listOfBooks
+          listOfBooks.push(element);
+
+          // Target last book added to list and add progress property to element.
+          listOfBooks[listOfBooks.length -1].progress = 0;
+
+          // Also create a div with the added books info to DOM.
+          function createDiv() {
+            // Create new div. 
+            var newDiv = document.createElement('div');
+
+            // Create new paragraph for div.
+            _.makeElement('p', element.title, undefined, undefined, newDiv);
+
+            // Create star button for div.
+            _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
+              newDiv);
+
+            // Create remove button for div.
+            _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
+
+            // Add each book on top of the last.
+            var currentDiv = document.getElementById('div1');
+            document.getElementById('bookList').insertBefore(newDiv, currentDiv);
+            // Set new buttons onclick to funciton.
+            newDiv.lastChild.previousSibling.onclick = createCurrent;
+            newDiv.lastChild.onclick = removeBook;
+          }
+
+          // Fire createDiv function.
+          return createDiv();
+        }
+      });
+    }
   }
 //------------------------------------------------------------------------------
 
@@ -463,6 +475,7 @@
 //------------------------------------------------------------------------------
   // Add Completed Books to DOM.
   function addToCompletedBooks() {
+    $('#completedBooks').innerHTML = '';
     // Loop through completed books array to update DOM with current completed.
     _.each(completedBooks, function(element) {
       // Create new div. 
