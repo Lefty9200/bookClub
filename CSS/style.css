@@ -1,38 +1,76 @@
-#appName {
-  display: inline-block;
-  margin: 20px 0 20px 0;
+html, body {
+  font-family: "Oxygen", sans-serif; 
+  font-weight: 300; 
+  margin: 0;
+  padding: 0;
 }
 
-#login {
-  float: right;
-  margin: 29px 0 29px 0;
+.container {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 10px;
 }
 
-img {
-  display: inline-block;
+h1 {
+  color: black;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: 300;
 }
 
-#info {
-  margin: 30px;
-  display: inline-block;
-  position: absolute;
+input {
+  background-color: white;
+  border: 0px;
+  border-radius: 0px;
+  border-bottom: 1px solid black;
+  color: gray;
+  font-size: 18px;
+  margin: 0 20px 0 0;
+  width: 400px;
 }
 
-#bookSearch {
-  margin: 30px 0  30px 40%;
+button {
+  color: black;
+  background: white;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 8px 20px;
+  margin-bottom: 15px;
 }
 
-#alertStatement, #pageAlert {
+#pageAlert, #searchAlert {
   color: red;
 }
 
-footer p {
+.sectionHeading {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.sectionButton {
+  display: inline-block;
+}
+
+.searchResult, .book, .completed {
+  border-bottom: gray solid 1px;
+  margin-bottom: 50px;
+}
+
+.book button {
+  margin: 0 20px 15px 0;
+}
+
+footer {
+  padding: 60px 0;
   float: right;
 }
 
-#cover {
-}
 
-#bookContent {
-  float: right;
-}
+
+
+
+
+
+
+

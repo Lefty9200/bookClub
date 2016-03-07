@@ -9,57 +9,61 @@
 
   <body>
     <div id='header'>
-      <h1 id='appName'>Book Club</h1>
-      <div id='login'>
-        <input type='text' name='username' placeholder='Name'>
-        <input type='password' name='psw' placeholder='Password'>
-        <button>Sign In</button>
+      <div class='container'>
+        <h1 id='appName'>Book Club</h1>
       </div>
     </div>
 
     <main>
-      <div id='currentBook'>
-        <img id='bookCover'></img>
-        <div id='bookContent'>
-          <h2 id='title'></h2>
-          <p id='author'></p>
-          <p id='pagesRead'></p>
-          <p id='percentComplete'></p>
-          <p id='pageInput'><input type='number' name='currentPage' placeholder='Page Number'></input><button>Update Current page</button> <button>Mark as complete</button></p>
-          <p id='pageAlert'></p>
+      <div class='container'>
+        <div id='currentBook'>
+          <img id='bookCover'></img>
+          <div id='bookContent'>
+            <h2 id='title'></h2>
+            <p id='author'></p>
+            <p id='pagesRead'></p>
+            <p id='percentComplete'></p>
+            <p id='pageInput'><input type='number' name='currentPage' placeholder='Page Number'></input><button>Update Current page</button> <button>Mark as complete</button></p>
+            <p id='pageAlert'></p>
+          </div>
         </div>
       </div>
 
-      <div id='bookSearch'>
-        <input type='search' name='search' id='searchInput' placeholder='Search by Title or Author'>
-        <button id='searchButton'>Search</button>
-        <p id='alertStatement'></p>
+      <div class='container'>
+        <div id='bookSearch'>
+          <input type='search' name='search' id='searchInput' placeholder='Search by Title or Author'>
+          <button id='searchButton'>Search</button>
+          <p id='searchAlert'></p>
+        </div>
       </div>
 
-      <div>
-        <h2>Search Results</h2><button id='clear'>Clear</button>
+      <div class='container'>
+        <h2 class='sectionHeading'>Search Results</h2>
+        <button class='sectionButton' id='clear'>Clear</button>
         <div id='searchResults'>
         </div>
       </div>
 
-      <div>
-        <h2>Book List</h2>
-        <button id='toggleBookList'>Toggle List</button>
+      <div class='container'>
+        <h2 class='sectionHeading'>Book List</h2>
+        <button class='sectionButton' id='toggleBookList'>Toggle List</button>
         <div id='bookList'>          
         </div>
       </div>
 
-      <div>
-        <h2>Completed</h2>
-        <button id='toggleCompletedList'>Toggle List</button>
+      <div class='container'>
+        <h2 class='sectionHeading'>Completed</h2>
+        <button class='sectionButton' id='toggleCompletedList'>Toggle List</button>
         <div id='completedBooks'>          
         </div>
       </div>
     </main>
 
-    <footer> 
-      <p>Bookclub Inc.</p>  
-    </footer>
+    <div class='container'>
+      <footer> 
+        <p>Bookclub Inc.</p>  
+      </footer>
+    </div>
     
     <script src='javascript/app.js'></script>
     <script src='' id='searchScript'></script>

@@ -1,0 +1,63 @@
+<html>
+  <head>
+      <title>book club</title>
+
+      <link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+
+    <body>
+      <div id="header">
+        <div class="container">
+          <h1 id="appName">Book Club</h1>
+        </div>
+      </div>
+
+      <main>
+        <div id="currentBook">
+          <div class="container">
+            <img id="bookCover" src="http://books.google.com/books/content?id=wrOQLV6xB-wC&amp;printsec=frontcover&amp;img=1&amp;zoom=1&amp;edge=curl&amp;source=gbs_api">
+            <div id="bookContent">
+              <h2 id="title">Harry Potter and the Sorcerer's Stone</h2>
+              <p id="author">Author: J.K. Rowling</p>
+              <p id="pagesRead">50 pages read - 259 pages to go!</p>
+              <p id="percentComplete">16% completed!</p>
+              <p id="pageInput" style="display: block;"><input type="number" name="currentPage" placeholder="Page Number"><button>Update Current page</button> <button>Mark as complete</button></p>
+              <p id="pageAlert"></p>
+            </div>
+          </div>
+        </div>
+
+        <div id="bookSearch">
+          <input type="search" name="search" id="searchInput" placeholder="Search by Title or Author">
+          <button id="searchButton">Search</button>
+          <p id="alertStatement"></p>
+        </div>
+
+        <div>
+          <h2>Search Results</h2><button id="clear">Clear</button>
+          <div id="searchResults"><div class="searchResult" id="0"><p>Tom Clancy Full Force and Effect</p><p>By: Mark Greaney</p><p>Description: <br><br>A North Korean ICBM crashes into the Sea of Japan. A veteran CIA officer is murdered in Ho Chi Minh City, and a package of forged documents goes missing. The pieces are there, but assembling the puzzle will cost Jack Ryan, Jr. and his fellow Campus agents precious time. Time they don’t have. The challenge facing President Jack Ryan is an old one with a terrifying new twist. The international stalemate with North Korea continues into its seventh decade. A young, untested dictator is determined to prove his strength by breaking the deadlock. Like his father before him, he hangs his plans on the country’s nuclear ambitions. Until now, that program was impeded by a lack of resources. However, there has been a dramatic change in the nation’s economic fortune. A rich deposit of valuable minerals have been found in the Hermit Kingdom. Coupled with their nuclear capabilities, the money from this find will make North Korea a dangerous force on the world stage. There’s just one more step needed to complete this perfect plan…the elimination of the president of the United States.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="1"><p>Debt of Honor</p><p>By: Tom Clancy</p><p>Description: <br><br>Razio Yamata is one of Japan's most influential industrialists, and part of a relatively small group of authority who wield tremendous authority in the Pacific Rim's economic powerhouse. He has devised a plan to cripple the American greatness, humble the US military, and elevate Japan to a position of dominance on the world stage. Yamata's motivation lies in his desire to pay off a Debt of Honor to his parents and to the country he feels is responsible for their deaths—America. All he needs is a catalyst to set his plan in motion. When the faulty gas tank on one Tennessee family's car leads to their fiery death, an opportunistic U. S. congressman uses the occasion to rush a new trade law through the system. The law is designed to squeeze Japan economically. Instead, it provides Yamata with the leverage he needs to put his plan into action. As Yamata's plan begins to unfold, it becomes clear to the world that someone is launching a fully-integrated operation against the United States. There's only one man to find out who the culprit is—Jack Ryan, the new President's National Security Advisor.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="2"><p>Command Authority</p><p>By: Tom Clancy</p><p>Description: <br><br>Decades ago, as a young CIA analyst, President Jack Ryan Sr. was sent out to investigate the death of an operative—only to uncover the existence of a KGB assassin codenamed Zenith. He was never able to find the killer… In the present, a new strongman has emerged in the ever-chaotic Russian republic—the enigmatic President Valeri Volodon. But the foundations of his personal empire are built on a bloody secret from his past. And none who know of it have lived to tell. For he has set a plot in motion—a plot to return Russia to its former glory. But when a family friend of Ryan’s is poisoned by a radioactive agent, the trail leads to Russia. And Jack Ryan Jr.—aided by his compatriots John Clark and the covert warriors of the secretive Campus—must delve into an international conflict thirty years in the making, and finish what his father started. With President Ryan fighting the political battle of his life, and his son fighting a silent war against a ruthless foe, global conflict becomes imminent—and the possibility of survival may soon be lost for all…</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="3"><p>Rainbow Six</p><p>By: Tom Clancy</p><p>Description: <br><br>Over the course of nine novels, Tom Clancy's genius for big, compelling plots and his natural narrative gift (The New York Times Magazine) have mesmerized hundreds of millions of readers and established him as one of the preeminent storytellers of our time. Rainbow Six, however, goes beyond anything he has done before. At its heart is John Clark, the ex-Navy SEAL of Without Remorse and well-known from several of Clancy's novels as "the dark side of Jack Ryan," the man who conducts the secret operational missions Ryan can have no part of. Whether hunting warlords in Japan, druglords in Colombia, or nuclear terrorists in the United States, Clark is efficient and deadly, but even he has ghosts in his past, demons that must be exorcised. And nothing is more demonic than the peril he must face in Rainbow Six: a group of terrorists like none the world has ever encountered before, a band of men and women so extreme that their success could literally mean the end of life on this earth as we know it. It is Tom Clancy's most shocking story ever--and closer to reality than any government would care to admit. As Clancy takes us through the twists and turns of Rainbow Six, he blends the exceptional realism and authenticity that are his hallmarks with intricate plotting, knife-edge suspense, and a remarkable cast of characters. This is Clancy at his best--and there is none better.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="4"><p>Command Authority</p><p>By: Tom Clancy</p><p>Description: <br><br>The #1 New York Times-bestselling author and master of the modern day thriller returns with his All-Star team. There’s a new strong man in Russia but his rise to power is based on a dark secret hidden decades in the past. The solution to that mystery lies with a most unexpected source, President Jack Ryan.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="5"><p>The Bear and the Dragon</p><p>By: Tom Clancy</p><p>Description: <br><br>In the wake of an assassination attempt on the SVR (former KGB) chairman, newly elected U.S. president Jack Ryan puts black ops specialist John Clark on the alert, only to have things complicated by dangerous forces in China.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="6"><p>The Hunt for Red October</p><p>By: Tom Clancy</p><p>Description: <br><br>Here is the runaway bestseller that launched Tom Clancy’s phenomenal career. A military thriller so gripping in its action and so convincing in its accuracy that the author was rumored to have been debriefed by the White House. Its theme: the greatest espionage coup in history. Its story: the chase for a top secret Russian missile sub. Lauded by the Washington Post as “breathlessly exciting,” The Hunt for Red October remains a masterpiece of military fiction by one of the world’s most popular authors, a man whose shockingly realistic scenarios continue to hold us in thrall.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="7"><p>Patriot Games</p><p>By: Tom Clancy</p><p>Description: <br><br>From Tom Clancy, the #1 New York Times bestselling author of the Jack Ryan novels--including his latest blockbusters Command Authority and Threat Vector--comes a gripping story of the Ryan family under fire. In an explosive wave of violence, an ultra-left-wing faction of the IRA is hunting one man for his act of salvation in an attempted assassination. And now Jack Ryan must pay…with his life.</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="8"><p>Tom Clancy Under Fire</p><p>By: Grant Blackwood</p><p>Description: <br><br>Jack Ryan, Jr., stands alone against powerful enemies in this latest novel in Tom Clancy's "New York Times" bestselling series. UNDER FIRE On a mission in Tehran, Jack Ryan, Jr., meets his oldest friend, Seth Gregory. As they part, Seth slips Jack a key, along with a perplexing message. The next day Jack is summoned to an apartment where two men claim Seth has disappeared with funds for a vital intelligence operation. They say he s turned and leave Jack with a warning: "If you hear from Seth, call us. Do not get involved. " Jack soon finds himself lost in a maze of intrigue, lies, and betrayal where no one is who they seem to be not even Seth, who s harboring a secret that harkens back to the Cold War. A secret that is driving him to the brink of treason..."</p><button class="addBookButton">Add to book list</button></div><div class="searchResult" id="9"><p>Red Storm Rising</p><p>By: Tom Clancy</p><p>Description: <br><br>When Moslem fundamentalists destroy a key Soviet oil complex, the Russians initiate a plan of diplomatic trickery for their seizure of Persian Gulf oil</p><button class="addBookButton">Add to book list</button></div></div>
+        </div>
+
+        <div>
+          <h2>Book List</h2>
+          <button id="toggleBookList">Toggle List</button>
+          <div id="bookList">          
+          <div id="selected"><p>Harry Potter and the Sorcerer's Stone</p><p>By: J.K. Rowling</p><button class="setCurrent">Set as current</button><button class="removeBook">Remove</button></div><div><p>The Hunt for Red October</p><p>By: Tom Clancy</p><button class="setCurrent">Set as current</button><button class="removeBook">Remove</button></div></div>
+        </div>
+
+        <div>
+          <h2>Completed</h2>
+          <button id="toggleCompletedList">Toggle List</button>
+          <div id="completedBooks" style="display: block;"><div class="completed"><p>Baptizing Harry Potter</p></div></div>
+        </div>
+      </main>
+
+      <footer> 
+        <p>Bookclub Inc.</p>  
+      </footer>
+      
+      <script src="javascript/app.js"></script>
+      <script src="" id="searchScript"></script>
+    
+  </body>
+</html>

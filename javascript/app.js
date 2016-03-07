@@ -140,8 +140,16 @@
       newDiv.id = index;
 
 
+      // Create new header for div to hold title and append to div.
+      _.makeElement('h3', element.title, undefined, undefined, newDiv);
+
+      // Create new paragraph for div to hold author and append to div.
+      _.makeElement('p', 'By: ' + element.author, undefined, undefined, newDiv);
+
       // Create new paragraph for div to hold title and append to div.
-      _.makeElement('p', element.title, undefined, undefined, newDiv);
+      _.makeElement('p', 'Description: <br>'+ element.description, undefined
+        , undefined, newDiv);
+
 
       // Create new paragraph for div to hold title and append to div.
       _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
@@ -155,21 +163,17 @@
       newDiv.lastChild.onclick = addTolistOfBooks;
     });
   }
-//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------  
 
-  /*
-    - Need to make search results display title, author and synopsys.
-    - Need to make button to collapse search results.
-  */  
 
 //------------------------------------------------------------------------------
   // Retrieve API results.
   function bookApi() {
     // Display error if no input value was given when search button pressed.
     if (searchInput.value.length === 0) {
-      $('#alertStatement').innerHTML = 'Please enter a search parameter!';
+      $('#searchAlert').innerHTML = 'Please enter a search parameter!';
     } else {
-      $('#alertStatement').innerHTML = '';
+      $('#searchAlert').innerHTML = '';
     }
     
     // Clear any previous search results.
@@ -240,27 +244,30 @@
     }
     // Fires scriptForSearch function to create custom search based on input.
     return scriptForSearch();
-
   }
   // Add event listener to search button so when clicked bookApi fires.
   searchButton.addEventListener('click', bookApi);
-
 //------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
   // Add book to listOfBooks array.
   function addTolistOfBooks() {
-    // Save the ID of the that was div added from the previous function.
+    // Save the element that was clicked for use in loops.
     var passedThis = this.parentNode;
+    // Create flag that will change if book is already in book list.
     var flag = true;
 
+    // For loop to loop through listOfBooks.
     for (var i = 0; i < listOfBooks.length; i++) {
+      // If list of books title = the clicked elements title.
       if (listOfBooks[i].title === passedThis.firstChild.innerHTML) {
+        // Set flag to false.
         flag = false;
       }
     }
 
+    // If flag is true do this.
     if (flag) {
       // Loop through search responses to compare index to clicked element.
       _.each(searchResponse, function(element, index) {
@@ -277,8 +284,15 @@
             // Create new div. 
             var newDiv = document.createElement('div');
 
-            // Create new paragraph for div.
-            _.makeElement('p', element.title, undefined, undefined, newDiv);
+            // Set new divs class
+            newDiv.className = 'book';
+
+            // Create new header for div with title.
+            _.makeElement('h3', element.title, undefined, undefined, newDiv);
+
+            // Create new paragraph for div with author.
+            _.makeElement('p', 'By: ' + element.author, undefined, undefined, 
+              newDiv);
 
             // Create star button for div.
             _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
@@ -290,6 +304,7 @@
             // Add each book on top of the last.
             var currentDiv = document.getElementById('div1');
             document.getElementById('bookList').insertBefore(newDiv, currentDiv);
+
             // Set new buttons onclick to funciton.
             newDiv.lastChild.previousSibling.onclick = createCurrent;
             newDiv.lastChild.onclick = removeBook;
@@ -304,7 +319,6 @@
 //------------------------------------------------------------------------------
 
 /*
-  - Need to make button to collapse book list.
   - Need to display title and author.
 */
 
@@ -482,8 +496,11 @@
       var newDiv = document.createElement('div');
       newDiv.className = 'completed';
 
+      // Create new header for div.
+      _.makeElement('h3', element.title, undefined, undefined, newDiv);
+
       // Create new paragraph for div.
-      _.makeElement('p', element.title, undefined, undefined, newDiv);
+      _.makeElement('p', 'By: ' + element.author, undefined, undefined, newDiv);
 
       // Add each book on top of the last.
       var currentDiv = document.getElementById('div1');
@@ -526,7 +543,6 @@
 
 /*
   // Still to go:
-  - Need to finish getting rid of javascript issues.
   - Need to read through code and make sure its as clean as can be.
   - Need to Style page.
   - Need to check against requirements.
