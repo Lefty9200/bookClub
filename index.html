@@ -10,7 +10,7 @@
   <body>
     <div id='header'>
       <div class='container'>
-        <h1 id='appName'>Book Club</h1>
+        <h1>Book Club</h1>
       </div>
     </div>
 
@@ -18,14 +18,14 @@
       <div class='container'>
         <div id='currentBook'>
           <img id='bookCover'></img>
-          <div id='bookContent'>
-            <h2 id='title'></h2>
-            <p id='author'></p>
-            <p id='pagesRead'></p>
-            <p id='percentComplete'></p>
-            <p id='pageInput'><input type='number' name='currentPage' placeholder='Page Number'></input><button>Update Current page</button> <button>Mark as complete</button></p>
-            <p id='pageAlert'></p>
-          </div>
+            <div id='bookContent'>
+              <h2 id='title'></h2>
+              <p id='author'></p>
+              <p id='pagesRead'></p>
+              <p id='percentComplete'></p>
+              <p id='pageInput'><input type='number' name='currentPage' placeholder='Page Number'></input><button>Update Current page</button> <button>Mark as complete</button></p>
+              <p id='pageAlert'></p>
+            </div>
         </div>
       </div>
 
@@ -38,22 +38,28 @@
       </div>
 
       <div class='container'>
-        <h2 class='sectionHeading'>Search Results</h2>
-        <button class='sectionButton' id='clear'>Clear</button>
+        <div class='sectionBar'>
+          <h2 class='sectionHeading'>Search Results</h2>
+          <button class='sectionButton' id='clear'>Clear</button>
+        </div>
         <div id='searchResults'>
         </div>
       </div>
 
       <div class='container'>
-        <h2 class='sectionHeading'>Book List</h2>
-        <button class='sectionButton' id='toggleBookList'>Toggle List</button>
+        <div class='sectionBar'>
+          <h2 class='sectionHeading'>Book List</h2>
+          <button class='sectionButton' id='toggleBookList'>Toggle List</button>
+        </div>
         <div id='bookList'>          
         </div>
       </div>
 
       <div class='container'>
-        <h2 class='sectionHeading'>Completed</h2>
-        <button class='sectionButton' id='toggleCompletedList'>Toggle List</button>
+        <div class='sectionBar'>
+          <h2 class='sectionHeading'>Completed</h2>
+          <button class='sectionButton' id='toggleCompletedList'>Toggle List</button>
+        </div>
         <div id='completedBooks'>          
         </div>
       </div>

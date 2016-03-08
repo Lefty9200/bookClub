@@ -1,3 +1,4 @@
+/* Main CSS */
 html, body {
   font-family: "Oxygen", sans-serif; 
   font-weight: 300; 
@@ -14,7 +15,7 @@ html, body {
 h1 {
   color: black;
   margin-top: 60px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   font-size: 32px;
   font-weight: 300;
 }
@@ -28,6 +29,10 @@ input {
   font-size: 18px;
   margin: 0 20px 0 0;
   width: 400px;
+}
+
+input:focus {
+  color: black;
 }
 
 button {
@@ -52,25 +57,56 @@ button {
   display: inline-block;
 }
 
+.sectionBar {
+  border-bottom: black 2px solid;
+}
+
+/* Current Book Section */
+#bookCover {
+  display: inline-block;
+  margin-right: 40px
+}
+
+#bookContent {
+  display: inline-block;
+  vertical-align:top
+}
+
+#bookContent h2 {
+  margin-top: 0;
+}
+
+#bookContent input {
+  width: 150px;
+}
+
+#currentBook {
+  margin-bottom: 50px;
+}
+
+#currentBook input {
+  width: 150px;
+  text-align: center;
+}
+
+
+/* Search Result Section */
 .searchResult, .book, .completed {
   border-bottom: gray solid 1px;
   margin-bottom: 50px;
 }
 
+
+/* Book List Section */
 .book button {
   margin: 0 20px 15px 0;
 }
 
+
+/* Footer */
 footer {
   padding: 60px 0;
   float: right;
 }
-
-
-
-
-
-
-
 
 

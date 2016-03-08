@@ -1,10 +1,11 @@
 //--Custom Library--------------------------------------------------------------
-  // Object to store custom library.
+  // Made an empty Object to store a custom library.
   var _ = {};
 
-  // QuerySelector. So I don't have to keep writing document.getElementByID. 
+  // Made a QuerySelector. So I don't have to keep writing 
+  // document.getElementByID that takes two arguemnts. 
   var $ = function(selector, el) {
-    // If element is not given as an argument.
+    // Check if the element is not given as an argument.
     if (!el) {
       // el is equal to the document object.
       el = document; 
@@ -34,7 +35,7 @@
 
   // Make element function.
   _.makeElement = function(type, text, elementClass, id, parentElement) {
-    // Create add new element for a parent element.
+    // Create new element for a parent element.
     var newElement = document.createElement(type);
 
     // Used ternary operators to make new elements if function provided values.
@@ -111,7 +112,7 @@
 
 //------------------------------------------------------------------------------
   // Function to hide current books info unless current book is already selected
-  // Thinking of future functionality when saving lists to a database.
+  // Thinking of future functionality when saving lists to a JSON file.
   function checkIfCurrent(arg) {
     // If currentBook object is empty do this.
     if (_.isItEmpty(arg)) {
@@ -539,48 +540,6 @@
     }
   };
 //------------------------------------------------------------------------------
-
-
-/*
-  // Still to go:
-  - Need to read through code and make sure its as clean as can be.
-  - Need to Style page.
-  - Need to check against requirements.
-  - Need to get up on github pages.
-  - Need to submit.
-*/ 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
