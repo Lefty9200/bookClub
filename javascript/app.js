@@ -2,30 +2,30 @@
   // Made an empty Object to store a custom library.
   var _ = {};
 
-  // Made a QuerySelector. So I don't have to keep writing 
-  // document.getElementByID that takes two arguemnts. 
+  // Made a QuerySelector function. So I don't have to keep writing 
+  // document.getElementByID or document.querySelector.
+  // Takes two arguments, both to be used in querySelector method. 
   var $ = function(selector, el) {
     // Check if the element is not given as an argument.
     if (!el) {
-      // el is equal to the document object.
       el = document; 
     }
     // Returns value of selector allowing me to use $(seletor) from now on. 
     return el.querySelector(selector);
   }
 
-  // each method so I don't have to keep writing for loops. 
+  // Created each method so I don't have to keep writing for loops. 
   _.each = function(list, callback) {
-    // If list is an array
+    // If list arguent passed is an array
     if (Array.isArray(list)) {
-      // Loop through use a standard for loop.
+      // Use a standard for loop.
       for (var i = 0; i < list.length; i++) {
         // Calls function to be used at a later time passing element, index and
         // complete list for later use.
         callback(list[i], i, list);
       }
     } else {
-      // If list is not an array it must be an object so use a for in loop.
+      // If list agument passed is not an array use a for in loop for an object.
       for (var key in list) {
         // Replaces i with key because using for in.
         callback(list[key], key, list);
@@ -33,9 +33,9 @@
     }
   }
 
-  // Make element function.
+  // Make element function to shorten the create element process later.
   _.makeElement = function(type, text, elementClass, id, parentElement) {
-    // Create new element for a parent element.
+    // Create new element for the parentElement passed.
     var newElement = document.createElement(type);
 
     // Used ternary operators to make new elements if function provided values.
@@ -43,11 +43,10 @@
     elementClass != undefined ? newElement.className = elementClass : undefined;
     id != undefined ? newElement.id = id : undefined;
 
-    // Append button to div after paragraph is already appended so its last.
     return parentElement.appendChild(newElement);
   }
 
-  // Make method to check if an object is empty.
+  // Make method to check if an object is empty. Use for current book variable
   _.isItEmpty = function(object) {
     // Loop through object. Not really a loop cause looking for one key.
     for(var key in object) {
@@ -65,23 +64,16 @@
 
 //------------------------------------------------------------------------------
   // Global variables.
-    // Button for search.
     var searchButton = $('#searchButton');
-    // Variable for search parameters.
     var searchInput = $('#searchInput');
-    // Variable for search clear.
     var searchClear = $('#clear');
-    // Variable for booklist toggle.
     var toggleBookList = $('#toggleBookList');
-    // Variable for completed list toggle.
     var toggleCompletedList = $('#toggleCompletedList');
-    // Array of search results.
+
+    // Arrays to store data for later use and keep track of user input.
     var searchResponse = [];
-    // Array of books on list.
     var listOfBooks = [];
-    // Array of completed books.
     var completedBooks = [];
-    // CurrentBook variable points to element.
     var currentBook = {};
 //------------------------------------------------------------------------------
 
@@ -101,26 +93,25 @@
     // Make page input visible for use.
     $('#pageInput').style.display = 'block';
 
-    // Set pageInputs button onclick to pagesRead function.
+    // Set pageInputs button onclick to necessary functions.
     $('#pageInput').firstChild.nextSibling.onclick = pagesRead;
+    $('#pageInput').lastChild.onclick = function() {
+      currentBook.progress = currentBook.pagecount;
 
-    // Set pageInputs button onclick to pagesRead function.
-    $('#pageInput').lastChild.onclick = markAsComplete;
+      return pagesRead();
+    };
   }
 //------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
   // Function to hide current books info unless current book is already selected
-  // Thinking of future functionality when saving lists to a JSON file.
+  // Thinking of future functionality when saving lists to a JSON file in db.
   function checkIfCurrent(arg) {
-    // If currentBook object is empty do this.
     if (_.isItEmpty(arg)) {
-      // Leave current book html elements empty.
       // Make pageInput hidden because current book not selected.
       $('#pageInput').style.display = 'none';
     } else {
-      // if not empty set currentBook html elements to currentBooks data.
       return setCurrent(currentBook);
     }
   }
@@ -130,29 +121,21 @@
 
 
 //------------------------------------------------------------------------------
-  // Populate search results.
+  // Populate search results in the DOM.
   function searchResult() {
-    // Iterate over searchResponse and fire function to create Div on each.
     _.each(searchResponse, function(element, index) {
-      // Create new div for each search result.
+
       var newDiv = document.createElement('div');
-      // Give div a class name for styling.
       newDiv.className = 'searchResult';
       newDiv.id = index;
 
-
-      // Create new header for div to hold title and append to div.
+      // Create new elements for div.
       _.makeElement('h3', element.title, undefined, undefined, newDiv);
-
-      // Create new paragraph for div to hold author and append to div.
       _.makeElement('p', 'By: ' + element.author, undefined, undefined, newDiv);
-
-      // Create new paragraph for div to hold title and append to div.
+      
       _.makeElement('p', 'Description: <br>'+ element.description, undefined
         , undefined, newDiv);
 
-
-      // Create new paragraph for div to hold title and append to div.
       _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
         newDiv);
 
@@ -177,19 +160,18 @@
       $('#searchAlert').innerHTML = '';
     }
     
-    // Clear any previous search results.
+    // Clear any previous search results in both arrays and DOM.
     searchResponse = [];
     $('#searchResults').innerHTML = '';
 
     // Add information needed for app to a usable array named searchResponse.
     function handleResponse() {
-      // Parse JSON Data for use.
+      // Save parsed JSON Data.
       var convert = JSON.parse(this.responseText);
 
-      // Call function to handle creation of a results object.
+      // Create object out of api results and push to global variable for use.
       _.each(convert.items, function(element, index) {
 
-        // Create object out of api results and push to global variable for use.
         searchResponse.push({ 
           title: element.volumeInfo.title,
           author: element.volumeInfo.authors[0],
@@ -198,7 +180,6 @@
           thumbnail: element.volumeInfo.imageLinks.thumbnail,
         });
 
-        // Clear Search Input.
         $('#searchInput').value = '';
       });
       // Returns searchResult to display actual information to DOM. 
@@ -208,37 +189,31 @@
 
     // Initializes api request. 
     function get(url) {
-      // Saving request in variable.
       var request = new XMLHttpRequest();
       // Forces handleResponse to fire after load is complete.
       request.addEventListener('load', handleResponse);
       // Opening request using url from result from scriptForSearch.
       request.open('GET', url);
-      // Sends request.
+      
       request.send();
     }
 
 
     // Creates script for search.
     function scriptForSearch() {
-      // Converts string entered into an array.
       var input = searchInput.value.split(' ');
-      // scriptString holds string with +'s added.
       var scriptString = '';
       // Holds the resulting url.
       var result = '';
 
       // Loops through array and adds + were applicable.
       _.each(input, function(element, index) {
-        // If search parameter is not the last parameter add '+'. 
         if (index != input.length - 1) {
           scriptString += element + '+'; 
         } else {
-          // If search paramter is the last one don't add '+'.
           scriptString += element;
         }
       });
-      // Add custom string to google api tag.
       result = 'https://www.googleapis.com/books/v1/volumes?q='+ scriptString;
       // Fires get function which gets the actual material from api.
       return get(result);
@@ -246,7 +221,6 @@
     // Fires scriptForSearch function to create custom search based on input.
     return scriptForSearch();
   }
-  // Add event listener to search button so when clicked bookApi fires.
   searchButton.addEventListener('click', bookApi);
 //------------------------------------------------------------------------------
 
@@ -259,20 +233,14 @@
     // Create flag that will change if book is already in book list.
     var flag = true;
 
-    // For loop to loop through listOfBooks.
     for (var i = 0; i < listOfBooks.length; i++) {
-      // If list of books title = the clicked elements title.
       if (listOfBooks[i].title === passedThis.firstChild.innerHTML) {
-        // Set flag to false.
         flag = false;
       }
     }
 
-    // If flag is true do this.
     if (flag) {
-      // Loop through search responses to compare index to clicked element.
       _.each(searchResponse, function(element, index) {
-        // If they match push element from search list to book list.
         if (parseInt(passedThis.id) === index) {
           // Push matching book from searchResponses to listOfBooks
           listOfBooks.push(element);
@@ -282,24 +250,17 @@
 
           // Also create a div with the added books info to DOM.
           function createDiv() {
-            // Create new div. 
             var newDiv = document.createElement('div');
-
-            // Set new divs class
             newDiv.className = 'book';
 
-            // Create new header for div with title.
             _.makeElement('h3', element.title, undefined, undefined, newDiv);
 
-            // Create new paragraph for div with author.
             _.makeElement('p', 'By: ' + element.author, undefined, undefined, 
               newDiv);
 
-            // Create star button for div.
             _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
               newDiv);
 
-            // Create remove button for div.
             _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
 
             // Add each book on top of the last.
@@ -319,40 +280,30 @@
   }
 //------------------------------------------------------------------------------
 
-/*
-  - Need to display title and author.
-*/
 
 //------------------------------------------------------------------------------
   // Remove book from book list
   function removeBook() {
-    // Save passed this to variable.
     var passedThis = this.parentNode;
 
     // If book being removed is current.
     if (passedThis.firstChild.innerHTML === currentBook.title) {
-      // Clear current object.
+      // Clear both DOM and element.
       currentBook = {};
-
-      // Current DOM elements need to be cleared.
       $('#bookCover').src = '';
       $('#title').innerHTML = '';
       $('#author').innerHTML = '';
       $('#pagesRead').innerHTML = '';
       $('#percentComplete').innerHTML = '';
 
-      // Make page input visible for use.
+      // Make page input invisible.
       $('#pageInput').style.display = 'none'; 
     }
 
-    // Iterate over list of books and apply a function to remove from list.
     _.each(listOfBooks, function(element, index) {
-      // If the listOfBooks objects title is equal to the clicked objects title
-      // remove this object from list
       if (passedThis.firstChild.innerHTML === element.title) {
-        // Remove this object from list.
+        // Remove this object from array and DOM.
         listOfBooks.splice(index, 1);        
-        // Remove object from DOM.
         passedThis.remove();
       }
     });
@@ -363,24 +314,19 @@
 //------------------------------------------------------------------------------
   // Create selected book.
   function createCurrent() {
-    // Save passed this to variable.
     var passedThis = this.parentNode;
 
     // If there is a current book already.
     if ($('#selected')) {
-      // Remove Id of selected book.
       $('#selected').removeAttribute('id');
     }
 
-    // Give clicked book in book list id of selected.
     passedThis.id = 'selected';
 
     // Clear alert if alert has been triggered prior.
     $('#pageAlert').innerHTML = '';
 
-    // Loop through list of books to compare to book clicked.
     _.each(listOfBooks, function(element, index) {
-      // If the clicked books title equals the book in list
       if (passedThis.firstChild.innerHTML === element.title) {
         // currentBook variable points to element
         currentBook = element;
@@ -396,88 +342,71 @@
 //------------------------------------------------------------------------------
   // Function to accept pages read.
   function pagesRead() {
-    // Make input a number using parseInt.
-    var input = parseInt($('#pageInput').firstChild.value);
-    // Clear input to placeholder
-    $('#pageInput').firstChild.value = '';
 
-    // If input is not a number.
-    if ( isNaN(input) ) {
-      // Display this Alert under the input box.
-      $('#pageAlert').innerHTML = 'Please enter a number!';
+    if (currentBook.progress === currentBook.pagecount) {
+      return updatePages();
     } else {
-      // If input is less than zero or greater than total bages in book.
-      if (input > currentBook.pagecount || input <= 0) {
-        // Display this alert.
-        $('#pageAlert').innerHTML = 'Page number enterd does not exist!';
+      var input = parseInt($('#pageInput').firstChild.value);
+      $('#pageInput').firstChild.value = '';
+
+      // First check if input is empty.
+      if (isNaN(input)) {
+        $('#pageAlert').innerHTML = 'Please enter a number!';
       } else {
-        // Set current page of current book.
-        currentBook.progress = input;
+        // Then check if input is greater than pagecount.
+        if (input > currentBook.pagecount || input <= 0) {
+          $('#pageAlert').innerHTML = 'Page number entered does not exist!';
+        } else {
+          // If neither checks are true set current page of current book.
+          currentBook.progress = input;
 
-        // Clear alert if alert has been triggered pior.
-        $('#pageAlert').innerHTML = '';
-        // Clear field input
-        $('#pageInput').value = '';
-  
-        // Pages before finished.
-        var toGoPages = currentBook.pagecount - currentBook.progress;
-
-
-        // Display pages read in reference to pages left.
-        $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + 
-          toGoPages + ' to go!';
-        // Display percent complete. Used Math.floor to get whole number.
-        $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
-          currentBook.pagecount) * 100) + '% completed!';
-
-          if (currentBook.progress === currentBook.pagecount) {
-            // Update alert to pick new book.
-            $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
-
-            // Fire the completed function to remove book from completed & list
-            return completed();
-          }
+          return updatePages();
         }
       }
     }
-//------------------------------------------------------------------------------
 
+    function updatePages() {
+      // Clear alert if alert has been triggered pior.
+      $('#pageAlert').innerHTML = '';
+      $('#pageInput').value = '';
 
-//------------------------------------------------------------------------------
-  // If mark as complete button clicked.
-  function markAsComplete() {
+      var toGoPages = currentBook.pagecount - currentBook.progress;
 
-   // Clear alert if alert has been triggered pior.
-   $('#pageAlert').innerHTML = '';
-   // Clear field input
-   $('#pageInput').value = '';
+      // Set DOM elements.
+      $('#pagesRead').innerHTML = currentBook.progress + ' read - ' + 
+        toGoPages + ' to go!';
 
-   // Display pages read in reference to pages left.
-   $('#pagesRead').innerHTML = currentBook.pagecount + ' read - ' + 
-     currentBook.pagecount + ' to go!';
-   // Display percent complete. Used Math.floor to get whole number.
-   $('#percentComplete').innerHTML = '100% completed!';
+      $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
+        currentBook.pagecount) * 100) + '% completed!';
 
-   // Update alert to pick new book.
-   $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
+      if (currentBook.progress === currentBook.pagecount) {
+        $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
 
-   // Fire the completed function to remove book from completed & list
-   return completed(); 
+        // Completed books array.
+        _.each(listOfBooks, function(element, index) {
+          if (currentBook === element) {
+            // Push book to completed list then remove from listOfBooks and DOM. 
+            completedBooks.push(element);
+            listOfBooks.splice(index, 1);        
+            $('#selected').remove();
+          }
+        });
+        // Add completed book to DOM.
+        return addToCompletedBooks();
+      }     
+    }
   }
+//------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
   // Completed books array.
   function completed() {
-    // Iterate over list of books and apply a function to remove from list.
     _.each(listOfBooks, function(element, index) {
-      // If the current book object equals a object in listOfBooks.
       if (currentBook === element) {
-        // Push book to completed list form listOfBooks. 
+        // Push book to completed list then remove from listOfBooks and DOM. 
         completedBooks.push(element);
-        // Then Remove book from list of books.
         listOfBooks.splice(index, 1);        
-        // Also remove book from DOM.
         $('#selected').remove();
       }
     });
@@ -493,14 +422,11 @@
     $('#completedBooks').innerHTML = '';
     // Loop through completed books array to update DOM with current completed.
     _.each(completedBooks, function(element) {
-      // Create new div. 
+
       var newDiv = document.createElement('div');
       newDiv.className = 'completed';
 
-      // Create new header for div.
       _.makeElement('h3', element.title, undefined, undefined, newDiv);
-
-      // Create new paragraph for div.
       _.makeElement('p', 'By: ' + element.author, undefined, undefined, newDiv);
 
       // Add each book on top of the last.
@@ -512,39 +438,26 @@
 
 
 //------------------------------------------------------------------------------
-  // If clear search button pressed
+  // If clear search button pressed clear both array and DOM of search results.
   searchClear.onclick = function clearSearch() {
-    // Clear Search array.
     searchResponse = [];
-    // Clear Search DOM.
     $('#searchResults').innerHTML = '';
   }
 //------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
-  // On toggle click fire hide/show book list. 
-  toggleBookList.onclick = function() {
-    if ($('#bookList').style.display === 'none') {
-      $('#bookList').style.display = 'block';
-    } else {
-      $('#bookList').style.display = 'none';
+  // On toggle click fire hide/show lists. 
+  function toggleButtons( listButton, el) {
+    listButton.onclick = function() {
+      if (el.style.display === 'none') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
     }
-  };
-  // On toggle click fire hide/show completed list.
-  toggleCompletedList.onclick = function() {
-    if ($('#completedBooks').style.display === 'none') {
-      $('#completedBooks').style.display = 'block';
-    } else {
-      $('#completedBooks').style.display = 'none';
-    }
-  };
+  }
+
+  toggleButtons(toggleBookList, $('#bookList'));
+  toggleButtons(toggleCompletedList, $('#completedBooks'));
 //------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
