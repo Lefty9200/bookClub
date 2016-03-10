@@ -16,7 +16,7 @@
 
   // Created each method so I don't have to keep writing for loops. 
   _.each = function(list, callback) {
-    // If list arguent passed is an array
+    // If list argument passed is an array
     if (Array.isArray(list)) {
       // Use a standard for loop.
       for (var i = 0; i < list.length; i++) {
@@ -172,13 +172,20 @@
       // Create object out of api results and push to global variable for use.
       _.each(convert.items, function(element, index) {
 
-        searchResponse.push({ 
-          title: element.volumeInfo.title,
-          author: element.volumeInfo.authors[0],
-          description: element.volumeInfo.description,
-          pagecount: element.volumeInfo.pageCount, 
-          thumbnail: element.volumeInfo.imageLinks.thumbnail,
-        });
+        var book = element.volumeInfo;
+
+        // Check that all values exist.
+        if (book.authors !== undefined && book.description !== undefined && 
+          book.pageCount !== undefined && book.imageLinks !== undefined) { 
+
+          searchResponse.push({ 
+            title: book.title,
+            author: book.authors[0],
+            description: book.description,
+            pagecount: book.pageCount, 
+            thumbnail: book.imageLinks.thumbnail
+          });
+        }
 
         $('#searchInput').value = '';
       });
