@@ -1,5 +1,5 @@
 # bookClub
--Web App using vanilla Javascript and linked to Google Books API
+Web App using vanilla Javascript and linked to Google Books API
 
 Functionality Includes:
 - Performing search for books by Title or Author.
