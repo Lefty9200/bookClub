@@ -129,11 +129,20 @@
 
 //--Global Variables------------------------------------------------------------
   var searchResponse = [];
-  var listOfBooks = [];
-  var completedBooks = [];
-  var currentBook = {};
+  var listOfBooks = JSON.parse(localStorage.getItem('listOfBooks')) || [];
+  var completedBooks = JSON.parse(localStorage.getItem('completedBooks')) || [];
+  var currentBook = JSON.parse(localStorage.getItem('currentBook')) || {};
 //------------------------------------------------------------------------------
 
+//--Local Storage---------------------------------------------------------------
+  window.onbeforeunload = function() {
+     // Save lists to local storage.
+     localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
+     localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
+     localStorage.setItem('currentBook', JSON.stringify(currentBook));
+     return null;
+  };
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
   // Check if current book already exists.
@@ -152,6 +161,7 @@
   // Sets current book if current book already exists or set current book
   // from book selected from booklist. 
   function setCurrent(arg) {
+    // Set DOM elements.
     $('#bookCover').src = currentBook.thumbnail;
     $('#title').innerHTML = currentBook.title;
     $('#author').innerHTML = 'Author: ' + currentBook.author;
@@ -159,7 +169,7 @@
       (currentBook.pagecount - currentBook.progress) + ' pages to go!';
     $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
       currentBook.pagecount) * 100) + '% completed!';
-
+    // Display input bar.
     $('#pageInput').style.display = 'block';
 
     // Update progress of current book to input.
@@ -206,12 +216,12 @@ $('#searchButton').addEventListener('click', function() {
     var convert = JSON.parse(this.responseText);
 
     _.each(convert.items, function(element, index) {
-
       var book = element.volumeInfo;
 
       if (book.authors !== undefined && book.description !== undefined && 
         book.pageCount !== undefined && book.imageLinks !== undefined) { 
 
+        // Push books to search result.
         searchResponse.push({ 
           title: book.title,
           author: book.authors[0],
@@ -222,6 +232,7 @@ $('#searchButton').addEventListener('click', function() {
 
         $('#searchInput').value = '';
 
+        // Make DOM elements.
         var newDiv = document.createElement('div');
         newDiv.className = 'searchResult';
         newDiv.id = index;
@@ -240,7 +251,6 @@ $('#searchButton').addEventListener('click', function() {
 
         newDiv.lastChild.onclick = addTolistOfBooks;
       }
-
     });
   });
 });
@@ -253,19 +263,23 @@ $('#searchButton').addEventListener('click', function() {
     var passedThis = this.parentNode;
     var flag = true;
 
+    // Don't alow duplicates to be added.
     for (var i = 0; i < listOfBooks.length; i++) {
       if (listOfBooks[i].title === passedThis.firstChild.innerHTML) {
         flag = false;
       }
     }
 
+    // If not a duplicate add book.
     if (flag) {
       _.each(searchResponse, function(element, index) {
         if (parseInt(passedThis.id) === index) {
           listOfBooks.push(element);
 
-          listOfBooks[listOfBooks.length -1].progress = 0;
+          // Set progress of newly added book to zero.
+          listOfBooks[listOfBooks.length - 1].progress = 0;
 
+          // Update booklist DOM.
           var newDiv = document.createElement('div');
           newDiv.className = 'book';
 
@@ -354,6 +368,7 @@ $('#searchButton').addEventListener('click', function() {
   var pagesRead = function(listObj, elDOM) {
     var toGoPages = listObj.pagecount - listObj.progress;
 
+    // If book is current book update DOM elements.
     if (listObj === currentBook) {
       $('#pagesRead').innerHTML = listObj.progress + ' read - ' + 
         toGoPages + ' to go!';
@@ -366,6 +381,7 @@ $('#searchButton').addEventListener('click', function() {
       }
     }
 
+    // If all pages read remove from list, add to completed list
     if (toGoPages === 0) {
       _.each(listOfBooks, function(element, index) {
         if (listObj === element) {
@@ -375,6 +391,7 @@ $('#searchButton').addEventListener('click', function() {
         }
       });
 
+      // Clear completed books list and update with added completed book.
       $('#completedBooks').innerHTML = '';
 
       _.each(completedBooks, function(element) {
