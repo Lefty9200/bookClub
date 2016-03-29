@@ -172,14 +172,14 @@
         $('#pageAlert').innerHTML = 'Page number entered does not exist!';
       } else {
         currentBook.progress = input;
-        return pagesRead(currentBook);
+        return pagesRead(currentBook, $('#selected'));
       }
     };
 
     // Update progress of current book to 100%.
     $('#pageInput').lastChild.onclick = function() {
       currentBook.progress = currentBook.pagecount;
-      return pagesRead(currentBook);
+      return pagesRead(currentBook, $('#selected'));
     };
   };
 //------------------------------------------------------------------------------
@@ -277,13 +277,16 @@ $('#searchButton').addEventListener('click', function() {
           _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
             newDiv);
 
+          _.makeElement('button', 'Mark as complete', 'markComplete', undefined, 
+            newDiv);
+
           _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
 
           var currentDiv = document.getElementById('div1');
           document.getElementById('bookList').insertBefore(newDiv, currentDiv);
 
           // Set current book.
-          newDiv.lastChild.previousSibling.onclick = function() {
+          newDiv.lastChild.previousSibling.previousSibling.onclick = function() {
             var passedThis = this.parentNode;
             if ($('#selected')) {
               $('#selected').removeAttribute('id');
@@ -300,6 +303,20 @@ $('#searchButton').addEventListener('click', function() {
                 return setCurrent(currentBook);
               }
             });
+          };
+
+          // Mark as complete.
+          newDiv.lastChild.previousSibling.onclick = function() {
+            var passedThis = this.parentNode;
+            var targetBook;
+
+            _.each(listOfBooks, function(element, index) {
+              if (passedThis.firstChild.innerHTML === element.title) {
+                targetBook = element;
+                targetBook.progress = targetBook.pagecount;
+              }
+            });
+            return pagesRead(targetBook, passedThis);
           };
 
           // Remove book from list. If current also remove from current.
@@ -334,14 +351,14 @@ $('#searchButton').addEventListener('click', function() {
 
 //------------------------------------------------------------------------------
   // Update pages read. If book complete push to completed list. 
-  var pagesRead = function(arg) {
-    var toGoPages = arg.pagecount - arg.progress;
+  var pagesRead = function(listObj, elDOM) {
+    var toGoPages = listObj.pagecount - listObj.progress;
 
-    if (arg === currentBook) {
-      $('#pagesRead').innerHTML = arg.progress + ' read - ' + 
+    if (listObj === currentBook) {
+      $('#pagesRead').innerHTML = listObj.progress + ' read - ' + 
         toGoPages + ' to go!';
 
-      $('#percentComplete').innerHTML = Math.floor((arg.progress / 
+      $('#percentComplete').innerHTML = Math.floor((listObj.progress / 
         currentBook.pagecount) * 100) + '% completed!';
 
       if (toGoPages === 0) {
@@ -351,10 +368,10 @@ $('#searchButton').addEventListener('click', function() {
 
     if (toGoPages === 0) {
       _.each(listOfBooks, function(element, index) {
-        if (arg === element) {
+        if (listObj === element) {
           completedBooks.push(element);
           listOfBooks.splice(index, 1);
-          $('#selected').remove();        
+          elDOM.remove();        
         }
       });
 
@@ -400,3 +417,11 @@ $('#searchButton').addEventListener('click', function() {
   toggleButtons($('#toggleBookList'), $('#bookList'));
   toggleButtons($('#toggleCompletedList'), $('#completedBooks'));
 //------------------------------------------------------------------------------
+
+/*
+ - additional feature.
+ - additional feature.
+ - Use Local Storage to hold onto the user's chosen booklist.
+ - Use Higher Order functions on my data.
+ - Create my own higher order functions. 
+*/

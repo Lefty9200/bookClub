@@ -89,13 +89,18 @@ button {
 /* Search Result Section */
 .searchResult, .book, .completed {
   border-bottom: gray solid 1px;
-  margin-bottom: 50px;
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
 
 
 /* Book List Section */
 .book button {
   margin: 0 20px 15px 0;
+}
+
+#selected {
+  background-color: #FFF28E;
 }
 
 
