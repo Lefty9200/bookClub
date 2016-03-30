@@ -116,14 +116,16 @@
     return parentElement.appendChild(newElement);
   };
 
-  _.isItEmpty = function(object) {
-    _.each(object, function(current) {
-      if (object.hasOwnProperty(key)) {
+  _.isEmpty = function(arg) {
+    if (Array.isArray(arg)) {
+      return arg.length === 0;
+    } else {
+      for (var key in arg) {
         return false;
       }
-    });
-    return true;
-  };  
+      return true;
+    }
+  }; 
 //------------------------------------------------------------------------------
 
 
@@ -146,14 +148,35 @@
 
 //------------------------------------------------------------------------------
   // Check if current book already exists.
-  var checkIfCurrent = function(arg, callback) {
-    if (_.isItEmpty(arg)) {
-      $('#pageInput').style.display = 'none';
+  var populateDOM = function(arg, callback) {
+    if (!_.isEmpty(arg)) {
+      callback(arg);
     } else {
-      return callback(arg);
+      if (arg === currentBook) {
+        $('#pageInput').style.display = 'none';
+      }
     }
   };
-  checkIfCurrent(currentBook, setCurrent);
+
+  populateDOM(listOfBooks, setListOfBooks)
+  populateDOM(completedBooks, setCompletedBooks)
+  populateDOM(currentBook, setCurrent);
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Set listOfBooks
+  function setListOfBooks() {
+
+  };
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+  // Set completedBooks
+  function setCompletedBooks() {
+
+  };
 //------------------------------------------------------------------------------
 
 

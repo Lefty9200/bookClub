@@ -16,3 +16,17 @@ window.onbeforeunload = function(){
    localStorage.setItem('currentBook', JSON.stringify(currentBook));
    return null;
 };
+
+
+var _ = {};
+
+_.isEmpty = function(arg) {
+  if (Array.isArray(arg)) {
+    return arg.length === 0;
+  } else {
+    for (var key in arg) {
+      return false;
+    }
+    return true;
+  }
+};
