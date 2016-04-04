@@ -139,11 +139,11 @@
 //--Local Storage---------------------------------------------------------------
   window.onbeforeunload = function() {
      // Save lists to local storage.
-     // localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
-     // localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
-     // localStorage.setItem('currentBook', JSON.stringify(currentBook));
-     localStorage.clear();
-     sessionStorage.clear();
+     localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
+     localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
+     localStorage.setItem('currentBook', JSON.stringify(currentBook));
+     // localStorage.clear();
+     // sessionStorage.clear();
 
      return null;
   };
@@ -209,12 +209,12 @@
         $('#pageAlert').innerHTML = '';
 
         _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
+          if (passedThis.firstChild.innerHTML === element.title) {
             currentBook = element;
 
             return setCurrent();
           }
-        }.bind(passedThis));
+        });
       };
 
       // Mark as complete.
@@ -223,11 +223,11 @@
         var targetBook;
 
         _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
+          if (passedThis.firstChild.innerHTML === element.title) {
             targetBook = element;
             targetBook.progress = targetBook.pagecount;
           }
-        }.bind(passedThis));
+        });
         return pagesRead(targetBook, passedThis);
       };
 
@@ -248,11 +248,11 @@
         }
 
         _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
+          if (passedThis.firstChild.innerHTML === element.title) {
             listOfBooks.splice(index, 1);        
-            this.remove();
+            passedThis.remove();
           }
-        }.bind(passedThis));
+        });
       };
     });
   };
@@ -395,7 +395,7 @@ $('#searchButton').addEventListener('click', function() {
 
     // If not a duplicate add book.
     _.each(searchResponse, function(element, index) {
-      if (flag && parseInt(this.id) === index) {
+      if (flag && parseInt(passedThis.id) === index) {
         listOfBooks.push(element);
 
         // Set progress of newly added book to zero.
@@ -403,7 +403,7 @@ $('#searchButton').addEventListener('click', function() {
 
         return setListOfBooks();
       }
-    }.bind(passedThis));
+    });
   };
 //------------------------------------------------------------------------------
 
