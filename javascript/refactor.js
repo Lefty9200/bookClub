@@ -20,92 +20,6 @@
     }
   };
 
-  _.first = function(collection, n) {
-    return _.reduce(collection, function(memo, current) {
-      if (n === undefined) {
-        return collection[0];
-      } else {
-        if (memo.length < n) {
-          memo.push(current);
-        }
-        return memo;
-      }
-    },[]);
-  };
-
-  _.last = function(collection, n) {
-    return _.reduce(collection, function(memo, current) {
-      if (n === undefined) {
-        return current;
-      } else {
-        if (collection.indexOf(current) >= n - 1) {
-          memo.push(current);
-        }
-        return memo;
-      }
-    }, []);
-  };
-
-  _.contains = function(collection, value) {
-    var result = false;
-    _.each(collection, function(current) {
-      if (current === value) {
-        result = true;
-      };
-    });
-    return result;
-  };
-
-  _.reduce = function(collection, callback, memo) {
-        var flag;
-        if(arguments.length === 2) {
-            flag = true;
-        }
-        _.each(collection, function(current) {
-        if(flag === true) {
-          memo = current;
-          flag = false;
-        } else {
-          memo = callback(memo, current);
-        }
-      });
-      return memo;
-  }; 
-
-  _.map = function(collection, callback) {
-    return _.reduce(collection, function(memo, current) {
-      memo.push(callback(current));
-      return memo;
-    }, []);
-  };
-
-  _.filter = function(collection, predicate) {
-    return _.reduce(collection, function(memo, current) {
-      if (predicate(current)) {
-        memo.push(current);
-      }
-      return memo;
-    },[]);
-  };
-
-  _.reject = function(collection, predicate) {
-    return _.reduce(collection, function(memo, current) {
-      if (!predicate(current)) {
-        memo.push(current);
-      }
-      return memo;
-    }, []);
-  };
-
-  _.pluck = function(collection, propertyName) {
-    return _.reduce(collection, function(memo, current) {
-      if (current[propertyName]) {
-        memo.push(current[propertyName]);
-      }
-      return memo;
-    }, []);
-  };
-
   _.makeElement = function(type, text, elementClass, id, parentElement) {
     var newElement = document.createElement(type);
 
@@ -136,34 +50,41 @@
   var currentBook = JSON.parse(localStorage.getItem('currentBook')) || {};
 //------------------------------------------------------------------------------
 
+
+//------------------------------------------------------------------------------
+  window.onload = function() {
+    populateDOM(listOfBooks, setListOfBooks);
+    populateDOM(completedBooks, setCompletedBooks);
+    populateDOM(currentBook, setCurrent);
+    //populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
+  }
+//------------------------------------------------------------------------------
+
+
 //--Local Storage---------------------------------------------------------------
   window.onbeforeunload = function() {
      // Save lists to local storage.
-     // localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
-     // localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
-     // localStorage.setItem('currentBook', JSON.stringify(currentBook));
-     localStorage.clear();
-     sessionStorage.clear();
-
+     localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
+     localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
+     localStorage.setItem('currentBook', JSON.stringify(currentBook));
+     // localStorage.clear();
+     // sessionStorage.clear();
      return null;
   };
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
   // Check if globol variables already exists.
-  var populateDOM = function(arg, callback) {
+  function populateDOM(arg, callback) {
     if (!_.isEmpty(arg)) {
       callback();
     } else {
       if (arg === currentBook) {
         $('#pageInput').style.display = 'none';
+        $('#dateInput').style.display = 'none';
       }
     }
   };
-
-  populateDOM(listOfBooks, setListOfBooks);
-  populateDOM(completedBooks, setCompletedBooks);
-  populateDOM(currentBook, setCurrent);
 //------------------------------------------------------------------------------
 
 
@@ -244,7 +165,8 @@
           $('#pageAlert').innerHTML = '';
 
 
-          $('#pageInput').style.display = 'none'; 
+          $('#pageInput').style.display = 'none';
+          $('#dateInput').style.display = 'none'; 
         }
 
         _.each(listOfBooks, function(element, index) {
@@ -294,6 +216,8 @@
       currentBook.pagecount) * 100) + '% completed!';
     // Display input bar.
     $('#pageInput').style.display = 'block';
+    $('#dateInput').style.display = 'block';
+
 
     // Update progress of current book to input.
     $('#pageInput').firstChild.nextSibling.onclick = function() {
@@ -307,6 +231,29 @@
         currentBook.progress = input;
         return pagesRead(currentBook, $('#selected'));
       }
+    };
+
+    // Update progress of current book to 100%.
+    $('#pageInput').lastChild.onclick = function() {
+      currentBook.progress = currentBook.pagecount;
+      return pagesRead(currentBook, $('#selected'));
+    };
+
+
+    // Update progress of current book to input.
+    $('#dateInput').firstChild.nextSibling.onclick = function() {
+      var currentDate = new Date();
+      var inputDate = new Date($('#dateInput').firstChild.value);
+      
+
+      // if (isNaN(input)) {
+      //   $('#pageAlert').innerHTML = 'Please enter a Date!';
+      // } else if (input > currentBook.pagecount || input <= 0) {
+      //   $('#pageAlert').innerHTML = 'Page number entered does not exist!';
+      // } else {
+      //   currentBook.progress = input;
+      //   return pagesRead(currentBook, $('#selected'));
+      // }
     };
 
     // Update progress of current book to 100%.
@@ -466,10 +413,10 @@ $('#searchButton').addEventListener('click', function() {
   toggleButtons($('#toggleCompletedList'), $('#completedBooks'));
 //------------------------------------------------------------------------------
 
+
 /*
  - additional feature.
  - additional feature.
- - Use Local Storage to hold onto the user's chosen booklist.
  - Use Higher Order functions on my data.
  - Create my own higher order functions. 
 */

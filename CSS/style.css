@@ -81,7 +81,7 @@ button {
 }
 
 #currentBook input {
-  width: 150px;
+  width: 180px;
   text-align: center;
 }
 
@@ -109,5 +109,3 @@ footer {
   padding: 60px 0;
   float: right;
 }
-
-
