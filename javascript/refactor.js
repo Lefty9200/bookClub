@@ -1,48 +1,3 @@
-//--Custom Library--------------------------------------------------------------
-  var _ = {};
- 
-  var $ = function(selector, el) {
-    if (!el) {
-      el = document; 
-    }
-    return el.querySelector(selector);
-  };
-
-  _.each = function(collection, callback) {
-    if (Array.isArray(collection)) {
-      for (var i = 0; i < collection.length; i++) {
-        callback(collection[i], i);
-      }
-    } else {
-      for (var key in collection) {
-        callback(collection[key], key);
-      }
-    }
-  };
-
-  _.makeElement = function(type, text, elementClass, id, parentElement) {
-    var newElement = document.createElement(type);
-
-    text != undefined ? newElement.innerHTML = text : undefined;
-    elementClass != undefined ? newElement.className = elementClass : undefined;
-    id != undefined ? newElement.id = id : undefined;
-
-    return parentElement.appendChild(newElement);
-  };
-
-  _.isEmpty = function(arg) {
-    if (Array.isArray(arg)) {
-      return arg.length === 0;
-    } else {
-      for (var key in arg) {
-        return false;
-      }
-      return true;
-    }
-  }; 
-//------------------------------------------------------------------------------
-
-
 //--Global Variables------------------------------------------------------------
   var searchResponse = [];
   var listOfBooks = JSON.parse(localStorage.getItem('listOfBooks')) || [];
@@ -52,36 +7,13 @@
 
 
 //------------------------------------------------------------------------------
-  window.onload = function() {
-    populateDOM(listOfBooks, setListOfBooks);
-    populateDOM(completedBooks, setCompletedBooks);
-    populateDOM(currentBook, setCurrent);
-    //populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
-  }
-//------------------------------------------------------------------------------
-
-
-//--Local Storage---------------------------------------------------------------
-  window.onbeforeunload = function() {
-     // Save lists to local storage.
-     localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
-     localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
-     localStorage.setItem('currentBook', JSON.stringify(currentBook));
-     // localStorage.clear();
-     // sessionStorage.clear();
-     return null;
-  };
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
   // Check if globol variables already exists.
-  function populateDOM(arg, callback) {
+  var populateDOM = function(arg, callback) {
     if (!_.isEmpty(arg)) {
       callback();
     } else {
       if (arg === currentBook) {
         $('#pageInput').style.display = 'none';
-        $('#dateInput').style.display = 'none';
       }
     }
   };
@@ -89,9 +21,90 @@
 
 
 //------------------------------------------------------------------------------
+  window.onload = function() {
+    populateDOM(listOfBooks, setListOfBooks);
+    populateDOM(completedBooks, setCompletedBooks);
+    populateDOM(currentBook, setCurrent);
+  };
+//------------------------------------------------------------------------------
+
+
+//--Local Storage---------------------------------------------------------------
+  window.onbeforeunload = function() {
+     // Save lists to local storage.
+     // localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
+     // localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
+     // localStorage.setItem('currentBook', JSON.stringify(currentBook));
+     localStorage.clear();
+     sessionStorage.clear();
+
+     return null;
+  };
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
   // Set listOfBooks DOM.
   function setListOfBooks() {
-    $('#bookList').innerHTML = '';
+
+    var setCurrentFromClick = function() {
+      var passedThis = this.parentNode;
+      if ($('#selected')) {
+        $('#selected').removeAttribute('id');
+      }
+
+      passedThis.id = 'selected';
+
+      _.clear($('#pageAlert'));
+
+      _.each(listOfBooks, function(element, index) {
+        if (this.firstChild.innerHTML === element.title) {
+          currentBook = element;
+
+          return setCurrent();
+        }
+      }.bind(passedThis));
+    };
+
+    var markCompleteFromClick = function() {
+      var passedThis = this.parentNode;
+      var targetBook;
+
+      _.each(listOfBooks, function(element, index) {
+        if (this.firstChild.innerHTML === element.title) {
+          targetBook = element;
+          targetBook.progress = targetBook.pagecount;
+        }
+      }.bind(passedThis));
+      return pagesRead(targetBook, passedThis);
+    };
+
+    var removeBook = function() {
+      var passedThis = this.parentNode;
+      if (passedThis.firstChild.innerHTML === currentBook.title) {
+        currentBook = {};
+        _.clear($('#bookCover'), 'src');
+        _.clear($('#title'));
+        _.clear($('#author'));
+        _.clear($('#pagesRead'));
+        _.clear($('#percentComplete'));
+        _.clear($('#pageAlert'));
+
+
+        $('#pageInput').style.display = 'none';
+        $('#dateInput').style.display = 'none'; 
+      }
+
+      _.each(listOfBooks, function(element, index) {
+        if (this.firstChild.innerHTML === element.title) {
+          listOfBooks.splice(index, 1);        
+          this.remove();
+        }
+      }.bind(passedThis));
+    };  
+
+
+    _.clear($('#bookList'));
 
     _.each(listOfBooks, function(element, index) {
       var newDiv = document.createElement('div');
@@ -119,63 +132,13 @@
 
 
       // Set current book.
-      newDiv.lastChild.previousSibling.previousSibling.onclick = function() {
-        var passedThis = this.parentNode;
-        if ($('#selected')) {
-          $('#selected').removeAttribute('id');
-        }
-
-        passedThis.id = 'selected';
-
-        $('#pageAlert').innerHTML = '';
-
-        _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
-            currentBook = element;
-
-            return setCurrent();
-          }
-        }.bind(passedThis));
-      };
+      newDiv.lastChild.previousSibling.previousSibling.onclick = setCurrentFromClick;
 
       // Mark as complete.
-      newDiv.lastChild.previousSibling.onclick = function() {
-        var passedThis = this.parentNode;
-        var targetBook;
-
-        _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
-            targetBook = element;
-            targetBook.progress = targetBook.pagecount;
-          }
-        }.bind(passedThis));
-        return pagesRead(targetBook, passedThis);
-      };
+      newDiv.lastChild.previousSibling.onclick = markCompleteFromClick;
 
       // Remove book from list. If current also remove from current.
-      newDiv.lastChild.onclick = function() {
-        var passedThis = this.parentNode;
-        if (passedThis.firstChild.innerHTML === currentBook.title) {
-          currentBook = {};
-          $('#bookCover').src = '';
-          $('#title').innerHTML = '';
-          $('#author').innerHTML = '';
-          $('#pagesRead').innerHTML = '';
-          $('#percentComplete').innerHTML = '';
-          $('#pageAlert').innerHTML = '';
-
-
-          $('#pageInput').style.display = 'none';
-          $('#dateInput').style.display = 'none'; 
-        }
-
-        _.each(listOfBooks, function(element, index) {
-          if (this.firstChild.innerHTML === element.title) {
-            listOfBooks.splice(index, 1);        
-            this.remove();
-          }
-        }.bind(passedThis));
-      };
+      newDiv.lastChild.onclick = removeBook;
     });
   };
 //------------------------------------------------------------------------------
@@ -185,7 +148,7 @@
   // Set completedBooks
   function setCompletedBooks() {
     // Clear completed books list and update with added completed book.
-    $('#completedBooks').innerHTML = '';
+    _.clear($('#completedBooks'));
 
     _.each(completedBooks, function(element) {
 
@@ -216,8 +179,6 @@
       currentBook.pagecount) * 100) + '% completed!';
     // Display input bar.
     $('#pageInput').style.display = 'block';
-    $('#dateInput').style.display = 'block';
-
 
     // Update progress of current book to input.
     $('#pageInput').firstChild.nextSibling.onclick = function() {
@@ -238,29 +199,6 @@
       currentBook.progress = currentBook.pagecount;
       return pagesRead(currentBook, $('#selected'));
     };
-
-
-    // Update progress of current book to input.
-    $('#dateInput').firstChild.nextSibling.onclick = function() {
-      var currentDate = new Date();
-      var inputDate = new Date($('#dateInput').firstChild.value);
-      
-
-      // if (isNaN(input)) {
-      //   $('#pageAlert').innerHTML = 'Please enter a Date!';
-      // } else if (input > currentBook.pagecount || input <= 0) {
-      //   $('#pageAlert').innerHTML = 'Page number entered does not exist!';
-      // } else {
-      //   currentBook.progress = input;
-      //   return pagesRead(currentBook, $('#selected'));
-      // }
-    };
-
-    // Update progress of current book to 100%.
-    $('#pageInput').lastChild.onclick = function() {
-      currentBook.progress = currentBook.pagecount;
-      return pagesRead(currentBook, $('#selected'));
-    };
   };
 //------------------------------------------------------------------------------
 
@@ -271,12 +209,12 @@ $('#searchButton').addEventListener('click', function() {
   var url = 'https://www.googleapis.com/books/v1/volumes?q=' + searchInput;
 
   searchResponse = [];
-  $('#searchResults').innerHTML = '';
+  _.clear($('#searchResults'));
 
   if (searchInput.length === 0) {
     $('#searchAlert').innerHTML = 'Please enter a search parameter!';
   } else {
-    $('#searchAlert').innerHTML = '';
+    _.clear($('#searchAlert'));
   };
 
   var request = new XMLHttpRequest();
@@ -300,7 +238,7 @@ $('#searchButton').addEventListener('click', function() {
           thumbnail: book.imageLinks.thumbnail
         });
 
-        $('#searchInput').value = '';
+        _.clear($('#searchInput'), 'value');
 
         // Make DOM elements.
         var newDiv = document.createElement('div');
@@ -413,10 +351,10 @@ $('#searchButton').addEventListener('click', function() {
   toggleButtons($('#toggleCompletedList'), $('#completedBooks'));
 //------------------------------------------------------------------------------
 
-
 /*
  - additional feature.
  - additional feature.
+ - Use Local Storage to hold onto the user's chosen booklist.
  - Use Higher Order functions on my data.
  - Create my own higher order functions. 
 */

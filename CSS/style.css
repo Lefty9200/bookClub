@@ -40,6 +40,22 @@ button {
   margin-bottom: 15px;
 }
 
+.setCurrent {
+  content: 'Set as current';
+}
+
+.markComplete {
+  content: 'Mark as complete';
+}
+
+.removeBook {
+  content: 'Remove';
+}
+
+.addBookButton {
+  content: ;
+}
+
 #pageAlert, #searchAlert {
   color: red;
 }
