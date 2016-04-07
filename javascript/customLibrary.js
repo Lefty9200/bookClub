@@ -20,7 +20,7 @@
     }
   };
 
-  _.makeElement = function(type, text, elementClass, id, parentElement) {
+  _.makeElement = function(type, elementClass, id, parentElement, text) {
     var newElement = document.createElement(type);
 
     text != undefined ? newElement.innerHTML = text : undefined;

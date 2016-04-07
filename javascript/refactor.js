@@ -92,7 +92,6 @@
 
 
         $('#pageInput').style.display = 'none';
-        $('#dateInput').style.display = 'none'; 
       }
 
       _.each(listOfBooks, function(element, index) {
@@ -114,18 +113,11 @@
         newDiv.id = 'selected';  
       }
 
-      _.makeElement('h3', element.title, undefined, undefined, newDiv);
-
-      _.makeElement('p', 'By: ' + element.author, undefined, undefined, 
-        newDiv);
-
-      _.makeElement('button', 'Set as current', 'setCurrent', undefined, 
-        newDiv);
-
-      _.makeElement('button', 'Mark as complete', 'markComplete', undefined, 
-        newDiv);
-
-      _.makeElement('button', 'Remove', 'removeBook', undefined, newDiv);
+      _.makeElement('h3', undefined, undefined, newDiv, element.title);
+      _.makeElement('p', undefined, undefined, newDiv, 'By: ' + element.author);
+      _.makeElement('button', 'setCurrent', undefined, newDiv);
+      _.makeElement('button', 'markComplete', undefined, newDiv);
+      _.makeElement('button', 'removeBook', undefined, newDiv);
 
       var currentDiv = document.getElementById('div1');
       document.getElementById('bookList').insertBefore(newDiv, currentDiv);
@@ -155,8 +147,8 @@
       var newDiv = document.createElement('div');
       newDiv.className = 'completed';
 
-      _.makeElement('h3', element.title, undefined, undefined, newDiv);
-      _.makeElement('p', 'By: ' + element.author, undefined, undefined, newDiv);
+      _.makeElement('h3', undefined, undefined, newDiv, element.title);
+      _.makeElement('p', undefined, undefined, newDiv, 'By: ' + element.author);
 
       var currentDiv = document.getElementById('div1');
       document.getElementById('completedBooks').insertBefore(newDiv, currentDiv);
@@ -245,14 +237,12 @@ $('#searchButton').addEventListener('click', function() {
         newDiv.className = 'searchResult';
         newDiv.id = index;
 
-        _.makeElement('h3', book.title, undefined, undefined, newDiv);
-        _.makeElement('p', 'By: ' + book.authors[0], undefined, undefined, newDiv);
-        
-        _.makeElement('p', 'Description: <br>'+ book.description, undefined
-          , undefined, newDiv);
 
-        _.makeElement('button', 'Add to book list', 'addBookButton', undefined, 
-          newDiv);
+        _.makeElement('h3', undefined, undefined, newDiv, book.title);
+        _.makeElement('p', undefined, undefined, newDiv, 'By: ' + book.authors[0]);
+        _.makeElement('p', undefined, undefined, newDiv, 'Description: <br>'+ book.description);
+        _.makeElement('button', 'addBook', undefined, newDiv);
+
 
         var currentDiv = document.getElementById('div1');
         document.getElementById('searchResults').insertBefore(newDiv, currentDiv);

@@ -40,20 +40,20 @@ button {
   margin-bottom: 15px;
 }
 
-.setCurrent {
+.setCurrent::before {
   content: 'Set as current';
 }
 
-.markComplete {
+.markComplete::before {
   content: 'Mark as complete';
 }
 
-.removeBook {
+.removeBook::before {
   content: 'Remove';
 }
 
-.addBookButton {
-  content: ;
+.addBook::before {
+  content: 'Add Book';
 }
 
 #pageAlert, #searchAlert {
