@@ -213,6 +213,7 @@ $('#searchButton').addEventListener('click', function() {
   request.open('GET', url);
   request.send();
   request.addEventListener('load', function() {
+
     var convert = JSON.parse(this.responseText);
 
     _.each(convert.items, function(element, index) {
@@ -232,24 +233,29 @@ $('#searchButton').addEventListener('click', function() {
 
         _.clear($('#searchInput'), 'value');
 
-        // Make DOM elements.
-        var newDiv = document.createElement('div');
-        newDiv.className = 'searchResult';
-        newDiv.id = index;
-
-
-        _.makeElement('h3', undefined, undefined, newDiv, book.title);
-        _.makeElement('p', undefined, undefined, newDiv, 'By: ' + book.authors[0]);
-        _.makeElement('p', undefined, undefined, newDiv, 'Description: <br>'+ book.description);
-        _.makeElement('button', 'addBook', undefined, newDiv);
-
-
-        var currentDiv = document.getElementById('div1');
-        document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-
-        newDiv.lastChild.onclick = addTolistOfBooks;
       }
     });
+
+    var DOMelements = function(collection) {
+      var Overall = [];
+      _.each(collection, function(current) {
+        var result = []
+          result.push(_.makeElement('h3', undefined, undefined, current.title));
+          result.push(_.makeElement('p', undefined, undefined, 'By: ' + current.author));
+          result.push(_.makeElement('p', undefined, undefined, 'Description: <br>'+ current.description));
+          result.push(_.makeElement('button', 'addBook', undefined));
+        Overall.push(result);
+      });
+      return Overall;
+    };
+
+    // Make DOM elements and save in array.
+    var elArray = DOMelements(searchResponse);
+    
+    // CreateDOM with created elements.
+    _.createDOM(searchResponse, 'searchResult', 'searchResults', elArray);
+
+    // newDiv.lastChild.onclick = addTolistOfBooks;
   });
 });
 //------------------------------------------------------------------------------
