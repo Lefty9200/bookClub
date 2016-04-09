@@ -1,4 +1,23 @@
-  var _ = {};
+var _ = {};
+ 
+  var $ = function(selector, el) {
+    if (!el) {
+      el = document; 
+    }
+    return el.querySelector(selector);
+  };
+
+  _.each = function(collection, callback) {
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        callback(collection[i], i);
+      }
+    } else {
+      for (var key in collection) {
+        callback(collection[key], key);
+      }
+    }
+  };
 
   _.makeElement = function(type, elementClass, id, text) {
     return {
@@ -7,6 +26,25 @@
       id: id,
       text: text
     }
+  };
+
+  _.isEmpty = function(arg) {
+    if (Array.isArray(arg)) {
+      return arg.length === 0;
+    } else {
+      for (var key in arg) {
+        return false;
+      }
+      return true;
+    }
+  }; 
+
+
+  _.clear = function(el, valToClear) {
+    if (valToClear === undefined) {
+      valToClear = 'innerHTML';
+    }
+    el[valToClear] = '';
   };
 
 
