@@ -6,32 +6,19 @@
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Check if globol variables already exists.
-  var populateDOM = function(arg, callback) {
-    if (!_.isEmpty(arg)) {
-      callback();
-    } else {
-      if (arg === currentBook) {
-        $('#pageInput').style.display = 'none';
-      }
-    }
-  };
-//------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------
+//--Populate DOM----------------------------------------------------------------
+  // If an array is not empty populate the DOM with elements. 
   window.onload = function() {
-    populateDOM(listOfBooks, setListOfBooks);
-    populateDOM(completedBooks, setCompletedBooks);
-    populateDOM(currentBook, setCurrent);
+    _.populateDOM(listOfBooks, setListOfBooks);
+    _.populateDOM(completedBooks, setCompletedBooks);
+    _.populateDOM(currentBook, setCurrent);
   };
 //------------------------------------------------------------------------------
 
 
 //--Local Storage---------------------------------------------------------------
+  // Save lists to local storage before closing of window.
   window.onbeforeunload = function() {
-     // Save lists to local storage.
      // localStorage.setItem('listOfBooks', JSON.stringify(listOfBooks));
      // localStorage.setItem('completedBooks', JSON.stringify(completedBooks));
      // localStorage.setItem('currentBook', JSON.stringify(currentBook));
@@ -43,123 +30,48 @@
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Set listOfBooks DOM.
+//--List of Books DOM-----------------------------------------------------------
+  // Function to create DOM elements for List of Books.
   function setListOfBooks() {
-
-    var setCurrentFromClick = function() {
-      var passedThis = this.parentNode;
-      if ($('#selected')) {
-        $('#selected').removeAttribute('id');
-      }
-
-      passedThis.id = 'selected';
-
-      _.clear($('#pageAlert'));
-
-      _.each(listOfBooks, function(element, index) {
-        if (this.firstChild.innerHTML === element.title) {
-          currentBook = element;
-
-          return setCurrent();
-        }
-      }.bind(passedThis));
-    };
-
-    var markCompleteFromClick = function() {
-      var passedThis = this.parentNode;
-      var targetBook;
-
-      _.each(listOfBooks, function(element, index) {
-        if (this.firstChild.innerHTML === element.title) {
-          targetBook = element;
-          targetBook.progress = targetBook.pagecount;
-        }
-      }.bind(passedThis));
-      return pagesRead(targetBook, passedThis);
-    };
-
-    var removeBook = function() {
-      var passedThis = this.parentNode;
-      if (passedThis.firstChild.innerHTML === currentBook.title) {
-        currentBook = {};
-        _.clear($('#bookCover'), 'src');
-        _.clear($('#title'));
-        _.clear($('#author'));
-        _.clear($('#pagesRead'));
-        _.clear($('#percentComplete'));
-        _.clear($('#pageAlert'));
-
-
-        $('#pageInput').style.display = 'none';
-      }
-
-      _.each(listOfBooks, function(element, index) {
-        if (this.firstChild.innerHTML === element.title) {
-          listOfBooks.splice(index, 1);        
-          this.remove();
-        }
-      }.bind(passedThis));
-    };  
-
-
+    // Clear previous list. 
     _.clear($('#bookList'));
 
-    _.each(listOfBooks, function(element, index) {
-      var newDiv = document.createElement('div');
-      newDiv.className = 'book';
+    // Define elements for each book in list.
+    var title = _.makeElement('h3', undefined, undefined, 'title');
+    var author = _.makeElement('p', undefined, undefined, 'author');
+    var currentButton = _.makeElement('button', 'setCurrent');
+    var CompleteButton = _.makeElement('button', 'markComplete');
+    var removeButton = _.makeElement('button', 'removeBook');
 
-      if (element.title === currentBook.title) {
-        newDiv.id = 'selected';  
-      }
+    var totalElements = [title, author, currentButton, CompleteButton, removeButton];
 
-      _.makeElement('h3', undefined, undefined, newDiv, element.title);
-      _.makeElement('p', undefined, undefined, newDiv, 'By: ' + element.author);
-      _.makeElement('button', 'setCurrent', undefined, newDiv);
-      _.makeElement('button', 'markComplete', undefined, newDiv);
-      _.makeElement('button', 'removeBook', undefined, newDiv);
-
-      var currentDiv = document.getElementById('div1');
-      document.getElementById('bookList').insertBefore(newDiv, currentDiv);
-
-
-      // Set current book.
-      newDiv.lastChild.previousSibling.previousSibling.onclick = setCurrentFromClick;
-
-      // Mark as complete.
-      newDiv.lastChild.previousSibling.onclick = markCompleteFromClick;
-
-      // Remove book from list. If current also remove from current.
-      newDiv.lastChild.onclick = removeBook;
-    });
+    // Create DOM with elements.
+    _.createDOM(listOfBooks, 'book', 'bookList', totalElements);
   };
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Set completedBooks
+//--Completed Books DOM---------------------------------------------------------
+  // Function to create DOM elements for Completed Books.
   function setCompletedBooks() {
-    // Clear completed books list and update with added completed book.
+    // Clear previous list.
     _.clear($('#completedBooks'));
 
-    _.each(completedBooks, function(element) {
+    // Define elements for each book in completed list.
+    var title = _.makeElement('h3', undefined, undefined, 'title');
+    var author = _.makeElement('p', undefined, undefined, 'author');
 
-      var newDiv = document.createElement('div');
-      newDiv.className = 'completed';
+    var totalElements = [title, author];
 
-      _.makeElement('h3', undefined, undefined, newDiv, element.title);
-      _.makeElement('p', undefined, undefined, newDiv, 'By: ' + element.author);
-
-      var currentDiv = document.getElementById('div1');
-      document.getElementById('completedBooks').insertBefore(newDiv, currentDiv);
-    }); 
+    // Create DOM with elements.
+    _.createDOM(completedBooks, 'completed', 'completedBooks', totalElements);
   };
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Sets current book if current book already exists or set current book
-  // from book selected from booklist. 
+//--Set Current Book DOM----------------------------------------------------------------------------
+  // Function to set current book if current book already exists or set current 
+  // book from book selected from booklist. 
   function setCurrent() {
     // Set DOM elements.
     $('#bookCover').src = currentBook.thumbnail;
@@ -172,7 +84,7 @@
     // Display input bar.
     $('#pageInput').style.display = 'block';
 
-    // Update progress of current book to input.
+    // Check if progress input is valid when clicked.
     $('#pageInput').firstChild.nextSibling.onclick = function() {
       var input = parseInt($('#pageInput').firstChild.value);
       $('#pageInput').firstChild.value = '';
@@ -182,13 +94,15 @@
         $('#pageAlert').innerHTML = 'Page number entered does not exist!';
       } else {
         currentBook.progress = input;
+        // If input valid pass to pagesRead.
         return pagesRead(currentBook, $('#selected'));
       }
     };
 
-    // Update progress of current book to 100%.
+    // Update progress of current book to 100% when clicked.
     $('#pageInput').lastChild.onclick = function() {
       currentBook.progress = currentBook.pagecount;
+      // Pass arguments to pagesRead.
       return pagesRead(currentBook, $('#selected'));
     };
   };
@@ -197,22 +111,8 @@
 
 //--Search Results--------------------------------------------------------------
 $('#searchButton').addEventListener('click', function() {
-  var searchInput = $('#searchInput').value.split(' ').join('+');
-  var url = 'https://www.googleapis.com/books/v1/volumes?q=' + searchInput;
-
-  searchResponse = [];
-  _.clear($('#searchResults'));
-
-  if (searchInput.length === 0) {
-    $('#searchAlert').innerHTML = 'Please enter a search parameter!';
-  } else {
-    _.clear($('#searchAlert'));
-  };
-
-  var request = new XMLHttpRequest();
-  request.open('GET', url);
-  request.send();
-  request.addEventListener('load', function() {
+  // Populate searchResults array and Search Results DOM.
+  var populateResults = function() {
     var convert = JSON.parse(this.responseText);
 
     _.each(convert.items, function(element, index) {
@@ -232,36 +132,54 @@ $('#searchButton').addEventListener('click', function() {
 
         _.clear($('#searchInput'), 'value');
 
-        // Make DOM elements.
-        var newDiv = document.createElement('div');
-        newDiv.className = 'searchResult';
-        newDiv.id = index;
-
-
-        _.makeElement('h3', undefined, undefined, newDiv, book.title);
-        _.makeElement('p', undefined, undefined, newDiv, 'By: ' + book.authors[0]);
-        _.makeElement('p', undefined, undefined, newDiv, 'Description: <br>'+ book.description);
-        _.makeElement('button', 'addBook', undefined, newDiv);
-
-
-        var currentDiv = document.getElementById('div1');
-        document.getElementById('searchResults').insertBefore(newDiv, currentDiv);
-
-        newDiv.lastChild.onclick = addTolistOfBooks;
       }
     });
-  });
+
+    // Elements to be used for each result in the DOM.
+    var title = _.makeElement('h3', undefined, undefined, 'title');
+    var author = _.makeElement('p', undefined, undefined, 'author');
+    var description = _.makeElement('p', undefined, undefined, 'description');
+    var addButton = _.makeElement('button', 'addBook');
+
+    var totalElements = [title, author, description, addButton];
+
+
+    // Create DOM with elements.
+    _.createDOM(searchResponse, 'searchResult', 'searchResults', totalElements);
+
+  };
+
+  // Create search url based on input.
+  var searchInput = $('#searchInput').value.split(' ').join('+');
+  var url = 'https://www.googleapis.com/books/v1/volumes?q=' + searchInput;
+
+  // Clear previous search results.
+  searchResponse = [];
+  _.clear($('#searchResults'));
+
+  // Confirm input valid;
+  if (searchInput.length === 0) {
+    $('#searchAlert').innerHTML = 'Please enter a search parameter!';
+  } else {
+    _.clear($('#searchAlert'));
+  };
+
+  // Make request.
+  var request = new XMLHttpRequest();
+  request.open('GET', url);
+  request.send();
+  request.addEventListener('load', populateResults); 
 });
 //------------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------------
-  // Add book to list of books.
+//--Search Result to List of Books----------------------------------------------
+  // Add search result clicked to list of books.
   var addTolistOfBooks = function() {
     var passedThis = this.parentNode;
     var flag = true;
 
-    // Don't alow duplicates to be added.
+    // Don't allow duplicates to be added.
     for (var i = 0; i < listOfBooks.length; i++) {
       if (listOfBooks[i].title === passedThis.firstChild.innerHTML) {
         flag = false;
@@ -280,6 +198,79 @@ $('#searchButton').addEventListener('click', function() {
       }
     }.bind(passedThis));
   };
+//------------------------------------------------------------------------------
+
+
+//--Current from List of Books--------------------------------------------------
+  // Set current book from list of books when clicked.
+  var currentFromClick = function() {
+    var passedThis = this.parentNode;
+
+    // Changed selected book in list to current. 
+    if ($('#selected')) {
+      $('#selected').removeAttribute('id');
+    }
+    passedThis.id = 'selected';
+
+    // Clear any page alerts.
+    _.clear($('#pageAlert'));
+
+    // Set Current book from list of books.
+    _.each(listOfBooks, function(element, index) {
+      if (this.firstChild.innerHTML === element.title) {
+        currentBook = element;
+
+        return setCurrent();
+      }
+    }.bind(passedThis));
+  };
+//------------------------------------------------------------------------------
+
+
+//--Mark Complete---------------------------------------------------------------
+  // Set pagecount to 100% if mark complete button is pressed.
+  var markComplete = function() {
+    var passedThis = this.parentNode;
+    var targetBook;
+
+    _.each(listOfBooks, function(element, index) {
+      if (this.firstChild.innerHTML === element.title) {
+        targetBook = element;
+        targetBook.progress = targetBook.pagecount;
+      }
+    }.bind(passedThis));
+    // Pass targetBook and this to pagesRead for list update.
+    return pagesRead(targetBook, passedThis);
+  };
+//------------------------------------------------------------------------------
+
+//--Remove Book-----------------------------------------------------------------
+  // Remove Book on click.
+  var removeBook = function() {
+    var passedThis = this.parentNode;
+
+    // If the book to remove is current book clear current book DOM.
+    if (passedThis.firstChild.innerHTML === currentBook.title) {
+      currentBook = {};
+      _.clear($('#bookCover'), 'src');
+      _.clear($('#title'));
+      _.clear($('#author'));
+      _.clear($('#pagesRead'));
+      _.clear($('#percentComplete'));
+      _.clear($('#pageAlert'));
+
+      // Hide input box.
+      $('#pageInput').style.display = 'none';
+    }
+
+    // Remove from array and DOM.
+    _.each(listOfBooks, function(element, index) {
+      if (this.firstChild.innerHTML === element.title) {
+        listOfBooks.splice(index, 1);        
+        this.remove();
+      }
+    }.bind(passedThis));
+  }; 
 //------------------------------------------------------------------------------
 
 
@@ -344,7 +335,4 @@ $('#searchButton').addEventListener('click', function() {
 /*
  - additional feature.
  - additional feature.
- - Use Local Storage to hold onto the user's chosen booklist.
- - Use Higher Order functions on my data.
- - Create my own higher order functions. 
 */
