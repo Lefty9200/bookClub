@@ -62,19 +62,37 @@ var _ = {};
       }
 
       // Don't know what to do with the make elements.
-      function takeElements(elArray) {
-        _.each(elArray, function(current, index) {
-          var newElement = document.createElement(current.type);
+      _.each(elArray, function(element, index) {
+        var newElement = document.createElement(element.type);
 
-          current.text != undefined ? newElement.innerHTML = text : undefined;
-          current.elementClass != undefined ? newElement.className = elementClass : undefined;
-          current.id != undefined ? newElement.id = id : undefined;
+        if (element.text === 'title') {
+          newElement.innerHTML = current.title;
+        } else if (element.text === 'author') {
+          newElement.innerHTML = 'By: ' + current.author;
+        } else if (element.text === 'description') {
+          newElement.innerHTML = 'Description: <br>'+ current.description;
+        }
 
-          newDiv.appendChild(newElement);
-        });
-      };
+        newElement.className = element.elementClass;
+        newElement.id = element.id;
 
+        newDiv.appendChild(newElement);
+      });
+      
       var currentDiv = document.getElementById('div1');
       document.getElementById(elToPush).insertBefore(newDiv, currentDiv);
+
+      if (collection === searchResponse) {
+        newDiv.lastChild.onclick = addTolistOfBooks;
+      } else if (collection === listOfBooks) {
+        newDiv.lastChild.previousSibling.previousSibling.onclick = setCurrentFromClick;
+
+        newDiv.lastChild.previousSibling.onclick = markCompleteFromClick;
+
+        newDiv.lastChild.onclick = removeBook;
+      }
     });
   };
+
+
+  
