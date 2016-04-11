@@ -46,26 +46,45 @@
     var totalElements = [title, author, currentButton, CompleteButton, removeButton];
 
     // Create DOM with elements.
-    _.createDOM(listOfBooks, 'book', 'bookList', totalElements);
+    _.createBook(listOfBooks, 'book', 'bookList', totalElements);
   };
 //------------------------------------------------------------------------------
 
+function createBook(bookObj) {
+  var parentDiv = $('div', true).addClass('book');
+  var title = $('h3', true).addClass('bookTitle').addText(bookObj.title);
+  var author = $('p', true).addClass('bookAuthor').addText(bookObj.author);
+  var currentButton = $('button', true).addClass('setCurrent');
+  var completeButton = $('button', true).addClass('markComplete');
+  var removeButton = $('button', true).addClass('removeBook');
+
+  var content = title.concat(author, currentButton, completeButton, removeButton);
+  return parentDiv.append(content);
+}
+
+var listOfBookDivs = _.map(listOfYourBooks, createBook);
+[
+  [title, author, asdf]
+]
+
+// go through listOfBookDivs
+// append each to wherever
 
 //--Completed Books DOM---------------------------------------------------------
   // Function to create DOM elements for Completed Books.
-  function setCompletedBooks() {
-    // Clear previous list.
-    _.clear($('#completedBooks'));
+  // function setCompletedBooks() {
+  //   // Clear previous list.
+  //   _.clear($('#completedBooks'));
 
-    // Define elements for each book in completed list.
-    var title = _.makeElement('h3', undefined, undefined, 'title');
-    var author = _.makeElement('p', undefined, undefined, 'author');
+  //   // Define elements for each book in completed list.
+  //   var title = _.makeElement('h3', undefined, undefined, 'title');
+  //   var author = _.makeElement('p', undefined, undefined, 'author');
 
-    var totalElements = [title, author];
+  //   var totalElements = [title, author];
 
-    // Create DOM with elements.
-    _.createDOM(completedBooks, 'completed', 'completedBooks', totalElements);
-  };
+  //   // Create DOM with elements.
+  //   _.createBook(completedBooks, 'completed', 'completedBooks', totalElements);
+  // };
 //------------------------------------------------------------------------------
 
 
@@ -145,7 +164,7 @@ $('#searchButton').addEventListener('click', function() {
 
 
     // Create DOM with elements.
-    _.createDOM(searchResponse, 'searchResult', 'searchResults', totalElements);
+    _.createBook(searchResponse, 'searchResult', 'searchResults', totalElements);
 
   };
 
