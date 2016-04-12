@@ -340,7 +340,12 @@ var books = [ {
     author: 'Nick',
     description: 'cool'
   }, 
-]
+  {
+    title: 'Rock',
+    author: 'Mike',
+    description: 'not cool'
+  }
+];
 
 var clicksy = function() {
   console.log(this.parentNode.firstChild.innerHTML);
