@@ -50,41 +50,24 @@
   };
 //------------------------------------------------------------------------------
 
-function createBook(bookObj) {
-  var parentDiv = $('div', true).addClass('book');
-  var title = $('h3', true).addClass('bookTitle').addText(bookObj.title);
-  var author = $('p', true).addClass('bookAuthor').addText(bookObj.author);
-  var currentButton = $('button', true).addClass('setCurrent');
-  var completeButton = $('button', true).addClass('markComplete');
-  var removeButton = $('button', true).addClass('removeBook');
-
-  var content = title.concat(author, currentButton, completeButton, removeButton);
-  return parentDiv.append(content);
-}
-
-var listOfBookDivs = _.map(listOfYourBooks, createBook);
-[
-  [title, author, asdf]
-]
-
 // go through listOfBookDivs
 // append each to wherever
 
 //--Completed Books DOM---------------------------------------------------------
   // Function to create DOM elements for Completed Books.
-  // function setCompletedBooks() {
-  //   // Clear previous list.
-  //   _.clear($('#completedBooks'));
+  function setCompletedBooks() {
+    // Clear previous list.
+    _.clear($('#completedBooks'));
 
-  //   // Define elements for each book in completed list.
-  //   var title = _.makeElement('h3', undefined, undefined, 'title');
-  //   var author = _.makeElement('p', undefined, undefined, 'author');
+    // Define elements for each book in completed list.
+    var title = _.makeElement('h3', undefined, undefined, 'title');
+    var author = _.makeElement('p', undefined, undefined, 'author');
 
-  //   var totalElements = [title, author];
+    var totalElements = [title, author];
 
-  //   // Create DOM with elements.
-  //   _.createBook(completedBooks, 'completed', 'completedBooks', totalElements);
-  // };
+    // Create DOM with elements.
+    _.createBook(completedBooks, 'completed', 'completedBooks', totalElements);
+  };
 //------------------------------------------------------------------------------
 
 
@@ -154,17 +137,8 @@ $('#searchButton').addEventListener('click', function() {
       }
     });
 
-    // Elements to be used for each result in the DOM.
-    var title = _.makeElement('h3', undefined, undefined, 'title');
-    var author = _.makeElement('p', undefined, undefined, 'author');
-    var description = _.makeElement('p', undefined, undefined, 'description');
-    var addButton = _.makeElement('button', 'addBook');
+    // Creates a book. 
 
-    var totalElements = [title, author, description, addButton];
-
-
-    // Create DOM with elements.
-    _.createBook(searchResponse, 'searchResult', 'searchResults', totalElements);
 
   };
 
@@ -350,6 +324,29 @@ $('#searchButton').addEventListener('click', function() {
   toggleButtons($('#toggleBookList'), $('#bookList'));
   toggleButtons($('#toggleCompletedList'), $('#completedBooks'));
 //------------------------------------------------------------------------------
+
+
+var what = [{
+    title: 'cool',
+    author: 'joe'
+  },
+  {
+    title: 'Ok',
+    author: 'Mike'
+  } ]
+
+var createBook = function(bookObj) {
+  var parentDiv = $('div', true).addClass('searchResult');
+  var title = $('h3', true).addClass('bookTitle').addText(bookObj.title);
+  var author = $('p', true).addClass('bookAuthor').addText(bookObj.author);
+  var currentButton = $('button', true).addClass('setCurrent');
+
+  var content = title.concat(author, currentButton);
+  return parentDiv.append(content);
+}
+
+var result = _.map(what, createBook);
+$('#searchResults').append(result);
 
 /*
  - additional feature.

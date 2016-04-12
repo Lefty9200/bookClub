@@ -1,35 +1,43 @@
 //--Custom Library--------------------------------------------------------------
 
 // Selector can be class, id, element string. Create is boolean signifying new element.
+// Set variable dollarsign equal to an annonymous function that takes in two arguments.
 var $ = function(selector, create) {
+  // declare a variable with no value.
   var elements;
-
-  if(typeof selector === 'string') {
+  // if type of first argument it string do this.
+  if (typeof selector === 'string') {
+    // if second argument is false do this.
     if (!create) {
-      elements = document.querySelectorAll(selector);
+      // set elements equal to all DOM elements that match argument one.
+      elements = document.querySelector(selector);
+      // If typeof selector is not a string do this.
     } else {
+      // if the first character on argument one it a period do this.
       if (selector[0] === '.') {
+        // declare variable div and set equal to doc.createElement('div');
         var div = document.createElement('div');
+        // Set className of div to argument one without the first character.
         div.className = selector.substring(1);
+        // set elements equal to an array containing the div.
         elements = [div];
+        // if the first character of argument one is a hash do this.
       } else if (selector[0] === '#') {
+        // declare variable div and set equal to doc.createElement('div');
         var div = document.createElement('div');
+        // set id to argument one minus character one.
         div.id = selector.substring(1);
+        // set elements equal to an array containing div.
         elements = [div];
+        // if no else if statments apply do this.
       } else {
+        // declare a variable and set it equal to document.createElement(selector)
         var el = document.createElement(selector);
+        // set elements equal to an array of el.
         elements = [el];
       }
     }
   }
-  console.log(elements);
-
-  elements.addClass = function(name) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].className += ' ' + name;
-    }
-    return elements;
-  };
   
   elements.addText = function(text) {
     for (var i = 0; i < elements.length; i++) {
@@ -38,25 +46,48 @@ var $ = function(selector, create) {
     return elements;
   };
 
-  elements.append = function($el) {
-   if (elements.length === 1) {
-    for (var i = 0; i < $el.length; i++) {
-      elements[0].appendChild($el[i]);
+  elements.addClass = function(name) {
+    for (var i = 0; i < elements.length; i++) {
+      if (elements[i].className === '') {
+        elements[i].className += name;
+      } else {
+        elements[i].className += ' ' + name;
+      }
     }
-   } 
-   return elements;
+    return elements;
+  };
+
+  elements.removeClass = function(rmClass) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].classList.remove(rmClass);
+    }
+  };
+
+  elements.toggleClass = function(tglClass) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].classList.toggle(tglClass);
+    }
+  };
+
+  elements.addAttribute = function(ky, val) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].setAttribute(ky, val);
+    }  
+  };
+
+  elements.append = function($el) {
+    for (var i = 0; i < $el.length; i++) {
+      if (elements.length === 1) {
+        elements[0].appendChild($el[i]);
+      } else {
+        elements.appendChild($el[i][0]);
+      }
+    }
+    return elements;
   }
-
-  // create a method setAttribute that takes in two arguments
-  // the arguments will be the key-value pair.
-  // for example: in an img, you'd have 'src' as the key
-  // and the link as the value
-
-  // create removeClass method that removes the specified
-  // class from an elements list of classes
-  
+ 
   return elements;
-}
+};
 
 
 var _ = {};
@@ -71,6 +102,32 @@ _.each = function(collection, callback) {
       callback(collection[key], key);
     }
   }
+};
+
+_.reduce = function(collection, callback, memo) {
+  var flag = false;
+
+  if (arguments.length === 2) {
+    flag = false;
+  }
+
+  _.each(collection, function(current) {
+    if (flag) {
+      memo = current;
+      flag = false;
+    } else {
+      memo = callback(memo, current);
+    }
+  });
+
+  return memo;
+};
+
+_.map = function(collection, iteratee) {
+  return _.reduce(collection, function(memo, current) {
+    memo.push(iteratee(current));
+    return memo;
+  }, []);
 };
 
 
@@ -94,17 +151,6 @@ _.clear = function(el, valToClear) {
 };
 
 
-// Make an object that will be used to create DOM elements.
-_.makeElement = function(type, elClass, elId, text) {
-  return {
-    type: type,
-    elClass: elClass,
-    elId: elId,
-    text: text
-  }
-};
-
-
 // If DOM is not empty invoke the callback.
 _.populateDOM = function(arg, callback) {
   if (!_.isEmpty(arg)) {
@@ -114,60 +160,5 @@ _.populateDOM = function(arg, callback) {
       $('#pageInput').style.display = 'none';
     }
   }
-};
-
-// Create Div for DOM with elements passed as arg. 
-_.createBook = function(collection, elClassName, elToPush, elArray) {
-  _.each(collection, function(current, index) {
-    // Make div for current.
-    var newDiv = document.createElement('div');
-    newDiv.className = elClassName;
-
-    // Give numbered index for searchResponses.
-    if (collection === searchResponse) {
-      newDiv.id = index;
-    } else if (collection === listOfBooks && current.title === currentBook.title) {
-      // Give book selected id if it is the current book.
-      newDiv.id = 'selected';
-    } 
-
-    // Populate each div with elements specified.
-    _.each(elArray, function(element, index) {
-      var newElement = document.createElement(element.type);
-
-      if (element.text === 'title') {
-        newElement.innerHTML = current.title;
-      } else if (element.text === 'author') {
-        newElement.innerHTML = 'By: ' + current.author;
-      } else if (element.text === 'description') {
-        newElement.innerHTML = 'Description: <br>'+ current.description;
-      } 
-
-      if (element.elClass !== undefined) {
-        newElement.className = element.elClass;
-      } 
-
-      if (element.elId !== undefined) {
-        newElement.id = element.elId;
-      }
-
-      newDiv.appendChild(newElement);
-    });
-    
-    // Push to DOM element one after the last.
-    var currentDiv = document.getElementById('div1');
-    document.getElementById(elToPush).insertBefore(newDiv, currentDiv);
-
-    // define on click functionality.
-    if (collection === searchResponse) {
-      newDiv.lastChild.onclick = addTolistOfBooks;
-    } else if (collection === listOfBooks) {
-      newDiv.lastChild.previousSibling.previousSibling.onclick = currentFromClick;
-
-      newDiv.lastChild.previousSibling.onclick = markComplete;
-
-      newDiv.lastChild.onclick = removeBook;
-    }
-  });
 };
 //------------------------------------------------------------------------------
