@@ -138,8 +138,18 @@ $('#searchButton').addEventListener('click', function() {
     });
 
     // Creates a book. 
+    var createBook = function(bookObj) {
+      var parentDiv = $('div', true).addClass('searchResult');
+      var title = $('h3', true).addClass('bookTitle').addText(bookObj.title);
+      var author = $('p', true).addClass('bookAuthor').addText('By: ' + bookObj.author);
+      var description = $('p', true).addClass('description').addText('Description: <br>'+ bookObj.description);
+      var currentButton = $('button', true).addClass('addBook');
+      var content = title.concat(author, description, currentButton);
+      return parentDiv.append(content);
+    }
 
-
+    var result = _.map(searchResponse, createBook);
+    $('#searchResults').append(result);
   };
 
   // Create search url based on input.
@@ -325,28 +335,32 @@ $('#searchButton').addEventListener('click', function() {
   toggleButtons($('#toggleCompletedList'), $('#completedBooks'));
 //------------------------------------------------------------------------------
 
+var books = [ {
+    title: 'Paper',
+    author: 'Nick',
+    description: 'cool'
+  }, 
+]
 
-var what = [{
-    title: 'cool',
-    author: 'joe'
-  },
-  {
-    title: 'Ok',
-    author: 'Mike'
-  } ]
+var clicksy = function() {
+  console.log(this.parentNode.firstChild.innerHTML);
+};
 
 var createBook = function(bookObj) {
   var parentDiv = $('div', true).addClass('searchResult');
   var title = $('h3', true).addClass('bookTitle').addText(bookObj.title);
-  var author = $('p', true).addClass('bookAuthor').addText(bookObj.author);
-  var currentButton = $('button', true).addClass('setCurrent');
-
-  var content = title.concat(author, currentButton);
+  var author = $('p', true).addClass('bookAuthor').addText('By: ' + bookObj.author);
+  var description = $('p', true).addClass('description').addText('Description: <br>'+ bookObj.description);
+  var currentButton = $('button', true).addClass('addBook');
+  var content = title.concat(author, description, currentButton);
   return parentDiv.append(content);
-}
+};
 
-var result = _.map(what, createBook);
+var result = _.map(books, createBook);
 $('#searchResults').append(result);
+
+$('.addBook').onclick = addTolistOfBooks;
+
 
 /*
  - additional feature.

@@ -9,8 +9,12 @@ var $ = function(selector, create) {
   if (typeof selector === 'string') {
     // if second argument is false do this.
     if (!create) {
-      // set elements equal to all DOM elements that match argument one.
-      elements = document.querySelector(selector);
+      if (selector[0] === '#') {
+        // set elements equal to all DOM elements that match argument one.
+        elements = document.querySelector(selector);
+      } else if (selector[0] === '.') {
+        elements = document.querySelector(selector); // returns NodeList
+      }
       // If typeof selector is not a string do this.
     } else {
       // if the first character on argument one it a period do this.
@@ -73,6 +77,19 @@ var $ = function(selector, create) {
     for (var i = 0; i < elements.length; i++) {
       elements[i].setAttribute(ky, val);
     }  
+  };
+
+  elements.listener = function(type, callback) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].addEventListener(type, callback);
+    }
+  };
+
+  elements.clicked = function(callback) {
+    console.log(elements);
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].onclick = callback;
+    }
   };
 
   elements.append = function($el) {
