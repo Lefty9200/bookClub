@@ -1,106 +1,104 @@
 //--Custom Library--------------------------------------------------------------
-
-// Selector can be class, id, element string. Create is boolean signifying new element.
-// Set variable dollarsign equal to an annonymous function that takes in two arguments.
 var $ = function(selector, create) {
-  // declare a variable with no value.
   var elements;
-  // if type of first argument it string do this.
   if (typeof selector === 'string') {
-    // if second argument is false do this.
     if (!create) {
-      if (selector[0] === '#') {
-        // set elements equal to all DOM elements that match argument one.
-        elements = document.querySelector(selector);
-      } else if (selector[0] === '.') {
-        elements = document.querySelector(selector); // returns NodeList
-      }
-      // If typeof selector is not a string do this.
-    } else {
-      // if the first character on argument one it a period do this.
       if (selector[0] === '.') {
-        // declare variable div and set equal to doc.createElement('div');
-        var div = document.createElement('div');
-        // Set className of div to argument one without the first character.
-        div.className = selector.substring(1);
-        // set elements equal to an array containing the div.
-        elements = [div];
-        // if the first character of argument one is a hash do this.
+        elements = document.getElementsByClassName(selector.substring(1));
       } else if (selector[0] === '#') {
-        // declare variable div and set equal to doc.createElement('div');
-        var div = document.createElement('div');
-        // set id to argument one minus character one.
-        div.id = selector.substring(1);
-        // set elements equal to an array containing div.
-        elements = [div];
-        // if no else if statments apply do this.
+        elements = document.getElementById(selector.substring(1));
       } else {
-        // declare a variable and set it equal to document.createElement(selector)
+        elements = document.getElementsByTagName(selector);
+      }
+    } else {
+      if (selector[0] === '.') {
+        var div = document.createElement('div');
+        div.className = selector.substring(1);
+        elements = [div];
+      } else if (selector[0] === '#') {
+        var div = document.createElement('div');
+        div.id = selector.substring(1);
+        elements = [div];
+      } else {
         var el = document.createElement(selector);
-        // set elements equal to an array of el.
         elements = [el];
       }
     }
   }
   
-  elements.addText = function(text) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].innerHTML = text;
-    }
-    return elements;
-  };
-
-  elements.addClass = function(name) {
-    for (var i = 0; i < elements.length; i++) {
-      if (elements[i].className === '') {
-        elements[i].className += name;
-      } else {
-        elements[i].className += ' ' + name;
+  if (elements !== null || undefined) {
+    elements.addText = function(text) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].innerHTML = text;
       }
-    }
-    return elements;
-  };
+      return elements;
+    };
 
-  elements.removeClass = function(rmClass) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].classList.remove(rmClass);
-    }
-  };
-
-  elements.toggleClass = function(tglClass) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].classList.toggle(tglClass);
-    }
-  };
-
-  elements.addAttribute = function(ky, val) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].setAttribute(ky, val);
-    }  
-  };
-
-  elements.listener = function(type, callback) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].addEventListener(type, callback);
-    }
-  };
-
-  elements.clicked = function(callback) {
-    console.log(elements);
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].onclick = callback;
-    }
-  };
-
-  elements.append = function($el) {
-    for (var i = 0; i < $el.length; i++) {
-      if (elements.length === 1) {
-        elements[0].appendChild($el[i]);
-      } else {
-        elements.appendChild($el[i][0]);
+    elements.addClass = function(name) {
+      for (var i = 0; i < elements.length; i++) {
+        if (elements[i].className === '') {
+          elements[i].className += name;
+        } else {
+          elements[i].className += ' ' + name;
+        }
       }
+      return elements;
+    };
+
+    elements.addId = function(name) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].id = name;
+      };
+      return elements;
+    };
+
+    elements.addSelected = function(name) {
+      for (var i = 0; i < elements.length; i++) {
+        if (name === currentBook.title) {
+          elements[i].id = 'selected';
+        }
+      }
+      return elements;
+    };
+
+    elements.removeClass = function(rmClass) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].classList.remove(rmClass);
+      }
+      return elements;
+    };
+
+    elements.toggleClass = function(tglClass) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].classList.toggle(tglClass);
+      }
+      return elements;
+    };
+
+    elements.addAttribute = function(ky, val) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].setAttribute(ky, val);
+      }
+      return elements;  
+    };
+
+    elements.setOnClick = function(callback) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].onclick = callback;              
+      };
+      return elements;
+    };
+
+    elements.append = function($el) {
+      for (var i = 0; i < $el.length; i++) {
+        if (elements.length === 1) {
+          elements[0].appendChild($el[i]);
+        } else {
+          elements.appendChild($el[i][0]);
+        }
+      }
+      return elements;
     }
-    return elements;
   }
  
   return elements;
