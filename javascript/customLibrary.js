@@ -1,7 +1,12 @@
 //--Custom Library--------------------------------------------------------------
+
+// Custom Jquery style library.
 var $ = function(selector, create) {
+  // set undefined variable.
   var elements;
+
   if (typeof selector === 'string') {
+    // create is false we are grabbing an already created DOM element.
     if (!create) {
       if (selector[0] === '.') {
         elements = document.getElementsByClassName(selector.substring(1));
@@ -10,7 +15,7 @@ var $ = function(selector, create) {
       } else {
         elements = document.getElementsByTagName(selector);
       }
-    } else {
+    } else {  // Create DOM element.
       if (selector[0] === '.') {
         var div = document.createElement('div');
         div.className = selector.substring(1);
@@ -26,6 +31,9 @@ var $ = function(selector, create) {
     }
   }
   
+  // Set of methods to assist in the creation of elements.
+  // More often than not there is only one element that we are applying these methods to.
+  // Could have used each instead of for loops but didn't want to mix libraries.
   if (elements !== null || undefined) {
     elements.addText = function(text) {
       for (var i = 0; i < elements.length; i++) {
@@ -105,6 +113,7 @@ var $ = function(selector, create) {
 };
 
 
+// Custom Underscore style library.
 var _ = {};
 
 _.each = function(collection, callback) {

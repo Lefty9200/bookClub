@@ -40,6 +40,7 @@ button {
   margin-bottom: 15px;
 }
 
+/*Though it was easiest to set button text in css*/
 .setCurrent::before {
   content: 'Set as current';
 }
