@@ -116,11 +116,11 @@
       $('#pageInput').firstChild.value = '';
 
       if (isNaN(input)) {
-        $('#pageAlert').innerHTML = 'Please enter a number!';
+        $('#pageAlert').addText('Please enter a number!');
       } else if (input > currentBook.pagecount || input <= 0) {
-        $('#pageAlert').innerHTML = 'Page number entered does not exist!';
+        $('#pageAlert').addText('Page number entered does not exist!');
       } else {
-
+        $('#pageAlert').addText('');
         // If input valid update progress and pass to pagesRead.
         currentBook.progress = input;
         return pagesRead(currentBook, $('#selected'));
@@ -134,13 +134,13 @@
     };
 
     // Elements for book already defined in html doc. Update to currentBook properties. 
-    $('#bookCover').src = currentBook.thumbnail;
-    $('#title').innerHTML = currentBook.title;
-    $('#author').innerHTML = 'Author: ' + currentBook.author;
-    $('#pagesRead').innerHTML = currentBook.progress +' pages read - ' + 
-      (currentBook.pagecount - currentBook.progress) + ' pages to go!';
-    $('#percentComplete').innerHTML = Math.floor((currentBook.progress / 
-      currentBook.pagecount) * 100) + '% completed!';
+    $('#bookCover').addAttribute('src', currentBook.thumbnail);
+    $('#title').addText(currentBook.title);
+    $('#author').addText('Author: ' + currentBook.author);
+    $('#pagesRead').addText(currentBook.progress +' pages read - ' + 
+      (currentBook.pagecount - currentBook.progress) + ' pages to go!');
+    $('#percentComplete').addText(Math.floor((currentBook.progress / 
+      currentBook.pagecount) * 100) + '% completed!');
 
     // Display input bar.
     $('#pageInput').style.display = 'block';
@@ -218,7 +218,7 @@ $('#searchButton').addEventListener('click', function() {
 
   // Confirm input valid;
   if (searchInput.length === 0) {
-    $('#searchAlert').innerHTML = 'Please enter a search parameter!';
+    $('#searchAlert').addText('Please enter a search parameter!');
   } else {
     _.clear($('#searchAlert'));
   };
@@ -357,14 +357,14 @@ $('#searchButton').addEventListener('click', function() {
 
     // If book is current book update DOM elements.
     if (listObj.title === currentBook.title) {
-      $('#pagesRead').innerHTML = listObj.progress + ' read - ' + 
-        toGoPages + ' to go!';
+      $('#pagesRead').addText(listObj.progress + ' read - ' + 
+        toGoPages + ' to go!');
 
-      $('#percentComplete').innerHTML = Math.floor((listObj.progress / 
-        currentBook.pagecount) * 100) + '% completed!';
+      $('#percentComplete').addText(Math.floor((listObj.progress / 
+        currentBook.pagecount) * 100) + '% completed!');
 
       if (toGoPages === 0) {
-        $('#pageAlert').innerHTML = 'Book Completed! Pick new book!!!';
+        $('#pageAlert').addText('Book Completed! Pick new book!!!');
       }
     };
 
@@ -393,7 +393,7 @@ $('#searchButton').addEventListener('click', function() {
   // Clear search results onclick.
   $('#clear').onclick = function() {
     searchResponse = [];
-    $('#searchResults').innerHTML = '';
+    $('#searchResults').addText('');
   };
 //------------------------------------------------------------------------------
 

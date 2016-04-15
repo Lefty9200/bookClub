@@ -6,7 +6,7 @@ var $ = function(selector, create) {
   var elements;
 
   if (typeof selector === 'string') {
-    // create is false we are grabbing an already created DOM element.
+    // if create is false we are grabbing an already created DOM element.
     if (!create) {
       if (selector[0] === '.') {
         elements = document.getElementsByClassName(selector.substring(1));
@@ -32,70 +32,108 @@ var $ = function(selector, create) {
   }
   
   // Set of methods to assist in the creation of elements.
-  // More often than not there is only one element that we are applying these methods to.
   // Could have used each instead of for loops but didn't want to mix libraries.
-  if (elements !== null || undefined) {
+  // In methods needed to differentiate between arrays and objects because sometimes
+  // returning objects to be used with native js methods, othertimes needed to use
+  // methods below.
+  if (elements !== null && elements !== undefined) {
     elements.addText = function(text) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].innerHTML = text;
-      }
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].innerHTML = text;
+        };     
+      } else {
+        elements.innerHTML = text;
+      };
       return elements;
     };
 
     elements.addClass = function(name) {
-      for (var i = 0; i < elements.length; i++) {
-        if (elements[i].className === '') {
-          elements[i].className += name;
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          if (elements[i].className === '') {
+            elements[i].className += name;
+          } else {
+            elements[i].className += ' ' + name;
+          };
+        };     
+      } else {
+        if (elements.className === '') {
+          elements.className += name;
         } else {
-          elements[i].className += ' ' + name;
-        }
-      }
+          elements.className += ' ' + name;
+        };
+      };
       return elements;
     };
 
     elements.addId = function(name) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].id = name;
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].id = name;
+        };     
+      } else {
+        elements.id = name;
       };
       return elements;
     };
 
     elements.addSelected = function(name) {
-      for (var i = 0; i < elements.length; i++) {
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          if (name === currentBook.title) {
+            elements[i].id = 'selected';
+          }
+        };     
+      } else {
         if (name === currentBook.title) {
-          elements[i].id = 'selected';
+          elements.id = 'selected';
         }
-      }
+      };
       return elements;
     };
 
     elements.removeClass = function(rmClass) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].classList.remove(rmClass);
-      }
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.remove(rmClass);
+        };     
+      } else {
+        elements.classList.remove(rmClass);
+      };
       return elements;
     };
 
     elements.toggleClass = function(tglClass) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].classList.toggle(tglClass);
-      }
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].classList.toggle(tglClass);
+        };     
+      } else {
+        elements.classList.toggle(tglClass);
+      };
       return elements;
     };
 
     elements.addAttribute = function(ky, val) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].setAttribute(ky, val);
-      }
+      if (Array.isArray(elements)) {
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].setAttribute(ky, val);
+        };     
+      } else {
+        elements.setAttribute(ky, val);
+      };
+
       return elements;  
     };
 
     elements.setOnClick = function(callback) {
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].onclick = callback;              
-      };
-      return elements;
-    };
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].onclick = callback;              
+          };
+          return elements;
+        };
+
 
     elements.append = function($el) {
       for (var i = 0; i < $el.length; i++) {
