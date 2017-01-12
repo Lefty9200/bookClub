@@ -9,7 +9,7 @@ const config = {
     path: path.join(__dirname, '/build')
   },
   resolve: {
-    extensions: ['', '.js', '.json']
+    extensions: ['', '.js', '.jsx', '.json']
   },
   devServer: {
       contentBase: "./client",
@@ -17,7 +17,7 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js$/, 
+        test: /\.(js|jsx)/, 
         loader: 'babel-loader'
       },
       {

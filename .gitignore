@@ -1,3 +1,26 @@
-# Modules #
-###########
-node_modules/
+# Dependency Directories #
+##########################
+node_modules
+
+# Webpack Bundle #
+##################
+webpack.bundle.js
+
+# Logs #
+########
+*.log
+npm-debug.log*
+
+# Runtime data #
+################
+pids
+*.pid
+*.seed
+
+# node-waf configuration #
+##########################
+.lock-wscript
+
+# Compiled binary addons (http://nodejs.org/api/addons.html) #
+##############################################################
+build/Release
