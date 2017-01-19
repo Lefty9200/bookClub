@@ -1,10 +1,10 @@
 # bookClub
-Web App using vanilla Javascript and linked to Google Books API.
+Web App using vanilla Javascript only. Makes XMLHttpRequests to Google Books API.
 
 ## Description:
-I used the google books api to create a web app that allows a user to track their reading progress on multiple books at once.The app tracks percentage complete, pages left and automatically moves a book from a users booklist to a completed list when finished. Arrays that hold search results, book list, completed books and the DOM are continuously updated throughout this process.
+I used the google books api to create a web app that allows a user to track their reading progress on multiple books at once. The app tracks percentage complete, pages left and automatically moves a book from a users booklist to a completed list when finished. Arrays that hold search results, book list, completed books and the DOM are continuously updated throughout this process.
 
-In my code I have created a jquery and an underscore style libraries to make the development process easier and cleaner. I have left some separator comments in my code that helped me follow the flow of the projects global elements. I know that in a live website you don't want to have these or any comments in your code but I thought it might help someone viewering my code.
+In my code I have created a jquery and an underscore style libraries to make the development process easier and cleaner. I have left some separator comments in my code that helped me follow the flow of the projects global elements.
 
 ## Since my first iteration of this project I have done the following: 
 
@@ -18,14 +18,11 @@ In my code I have created a jquery and an underscore style libraries to make the
 
 - To eliminate confusion on which book is current in the list of books. Created 'selected' id that would highlight which book in the list is current. This updates when current book is changed. 
 
-- Made it so you can mark a book as current stiaght from the book list instead of only in current book.
+- Made it so you can mark a book as current staight from the book list instead of only in current book.
 
 - Refactored all code to make use of newly created jquery style library.
 
 - Made a custom clear method to remove redundancy in clearing items.
-
-- Cleaned up code and made use of function delaractions only where applicable.
-
 
 
 Please let me know what you think!
