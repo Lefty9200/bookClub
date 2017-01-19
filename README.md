@@ -30,6 +30,6 @@ In my code I have created a jquery and an underscore style libraries to make the
 
 Please let me know what you think!
 
-Github pages link:   http://lefty9200.github.io/bookClub/
+Github pages link:   http://nickdaniele.github.io/bookClub/
 
 
